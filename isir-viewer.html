@@ -347,10 +347,12 @@ function _render_validation_report(isir_validation) {
 
 // Renders ISIR fields into collapsable sections of tables, as grouped by isir_report sections
 function _render_fields(isir_report) {
+    const _pos_to_cell = pos => (''+(1+pos)).padStart(3,' ')
     const as_field_row = ({field, value, result, invalid}) => (
         imm_html.tr(
             imm_html.td({class: 'field-idx'}, 'f_'+field.idx),
             imm_html.td({class: 'field-len'}, ''+field.len),
+            imm_html.td({class: 'field-pos'}, `${_pos_to_cell(field.pos_start)} to ${_pos_to_cell(field.pos_end-1)}`),
             imm_html.td({class: 'field-szvalue'}, imm_html.code(''+value)),
             imm_html.td({class: `field-result ${invalid ? 'field-invalid' : ''}`},
                 imm_html.code(invalid ? ''+invalid : JSON.stringify(result) || '')),
@@ -365,7 +367,7 @@ function _render_fields(isir_report) {
     for (let sect of isir_report) {
         let {el_section, el_thead, el_tbody} = _isir_section_for(sect, {open: 0===sect_num++})
 
-        let field_headers = ['field', 'len', 'value', 'result'].map(s => imm_html.th(s))
+        let field_headers = ['field', 'len', 'pos', 'value', 'result'].map(s => imm_html.th(s))
         field_headers.push(
             imm_html.th('path: ',
                 imm_html.code(''+([].concat(sect.path, ['']).join('.'))) ))
