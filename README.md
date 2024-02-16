@@ -56,6 +56,9 @@ This standalone tool generates mock data that can be used when hand-generating t
 **[`isir-module.js`](./code/isir-module.js)**  
 This JavaScript module is used for field-level validation in both `isir-viewer.html` and `isir-from-spreadsheet.html`. It is not necessary to download this file in order to run any of the provided tools; it is provided to give visibility into how the field-level validation works.
 
+## Changelog
+All notable changes to this project are recorded in [CHANGELOG.md](CHANGELOG.md).
+
 ## Contact Us
 We welcome our partners to continue to submit questions related to the 2024-25 FAFSA launch, including questions or comments about the FSA-developed additional test ISIRs and open-source tools, using the [Contact Customer Support form](https://fsapartners.ed.gov/help-center/contact-customer-support) in FSA’s Partner Connect Help Center. To submit a question, please enter your name, email address, topic, and question. When submitting a question related to this repository, please select the topic “2024-25 FAFSA.” 
 
