@@ -2,7 +2,7 @@
 The following test ISIRs are currently available. Additional test ISIRs will be added as they become available.
 * These test ISIRs are hand-generated and should be considered drafts. We will update test ISIRs if issues are identified.
 * All personally identifiable information (PII) in these test ISIRS is mock data and does not reflect real people.
-* These test ISIRs reflect the current ISIR format. That format may change. We will publish any changes to the ISIR layout prior to launching formal ISIR delivery.
+* These test ISIRs reflect the current ISIR format. 
 * To download a file: select the file, and on the resulting page click the "Download raw file" button in the upper right menu.
 
 | Filename | Description |
