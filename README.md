@@ -14,7 +14,7 @@ The test ISIRs and tools have been created using the following specifications:
     - _Volume 4 – Record Layouts and Processing Codes_
         - [2024–25 Final ISIR Record Layout in Excel Format, 96KB](https://fsapartners.ed.gov/sites/default/files/2023-11/2024-25ISIRNov2023.xlsx)
 
-[spec]: https://fsapartners.ed.gov/knowledge-center/library/handbooks-manuals-or-guides/2023-05-31/draft-2024-25-fafsa-specifications-guide-February-2024-Update
+[spec]: https://fsapartners.ed.gov/knowledge-center/library/handbooks-manuals-or-guides/2023-05-31/draft-2024-25-fafsa-specifications-guide-february-2024-update
 
 ## Getting Started
 
