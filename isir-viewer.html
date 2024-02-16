@@ -351,7 +351,7 @@ function _render_fields(isir_report) {
         imm_html.tr(
             imm_html.td({class: 'field-idx'}, 'f_'+field.idx),
             imm_html.td({class: 'field-len'}, ''+field.len),
-            imm_html.td({class: 'field-pos'}, `${(''+field.pos_start).padStart(3,' ')} to ${(''+field.pos_end).padStart(3,' ')}`),
+            imm_html.td({class: 'field-pos'}, `${(''+(1+field.pos_start)).padStart(3,' ')} to ${(''+(1+field.pos_end)).padStart(3,' ')}`),
             imm_html.td({class: 'field-szvalue'}, imm_html.code(''+value)),
             imm_html.td({class: `field-result ${invalid ? 'field-invalid' : ''}`},
                 imm_html.code(invalid ? ''+invalid : JSON.stringify(result) || '')),
