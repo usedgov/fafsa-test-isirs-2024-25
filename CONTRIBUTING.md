@@ -59,12 +59,11 @@ The module is then embedded in [`isir-viewer.html`](../isir-viewer.html) and [`i
 for reading and updating individual ISIR fields.
 
 ### ISIR technical specification for FAFSA 2024-2025
-Using published [Draft 2024-25 FAFSA Specifications Guide, December 2023 Update #2][full_spec] specification, 
+Using published [Draft 2024-25 FAFSA Specifications Guide (February 2024 Update)][full_spec] specification, 
 _Volume 4 – Record Layouts and Processing Codes_, [2024–25 Final ISIR Record Layout in Excel Format][vol_4_spec_xlsx]
 
   [vol_4_spec_xlsx]: https://fsapartners.ed.gov/sites/default/files/2023-11/2024-25ISIRNov2023.xlsx
-  [full_spec]: https://fsapartners.ed.gov/knowledge-center/library/handbooks-manuals-or-guides/2023-05-31/draft-2024-25-fafsa-specifications-guide-december-2023-update-2
-
+  [full_spec]: https://fsapartners.ed.gov/knowledge-center/library/handbooks-manuals-or-guides/2023-05-31/draft-2024-25-fafsa-specifications-guide-february-2024-update
 
 ### Building dependencies
 

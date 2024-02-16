@@ -365,7 +365,7 @@ const _validate_by_op = {
     year: (sz_value) => _check_range(sz_value, 1900, 2100),
     date: (sz_value) => _check_date(sz_value),
     dhs_case_number: (sz_value) => /[0-9]{13}[A-Z]{2}/.test(sz_value),
-    eti_destination: (sz_value) => /[A-Z]{2}[0-9A-Za-z]{5}/.test(sz_value),
+    eti_destination: (sz_value) => /(:?FT|TG)[0-9A-Za-z]{5}/.test(sz_value),
 }
 function _validate_options(sz_value, field) {
     // Many fields are allowed to be blank, but not marked as such in the spec
@@ -828,10 +828,10 @@ export const field_7 = {len: 1, pos_start: 112, pos_end: 113,
 export const field_8 = {len: 8, pos_start: 113, pos_end: 121,
     idx: 8, name: "Application Receipt Date", path: ["Application_Receipt_Date"], 
     validate: _validate_date,
-    "allow_blank":true,"options":[{"op":"range","min":"20231001","max":"20250630"}],
+    "allow_blank":true,"options":[{"op":"range","min":"20231227","max":"20250630"}],
     note: [
         "Format is CCYYMMDD",
-        "20231001 to 20250630",
+        "20231227 to 20250630",
         "Blank"
     ]};
 
@@ -888,10 +888,10 @@ export const field_11 = {len: 1, pos_start: 123, pos_end: 124,
 export const field_12 = {len: 8, pos_start: 124, pos_end: 132,
     idx: 12, name: "Transaction Receipt Date", path: ["Receipt_Date"], 
     validate: _validate_date,
-    "options":[{"op":"range","min":"20231231","max":"20250930"}],
+    "options":[{"op":"range","min":"20231227","max":"20250930"}],
     note: [
         "Format is CCYYMMDD",
-        "20231231 to 20250930"
+        "20231227 to 20250930"
     ]};
 
 export const field_13 = {len: 8, pos_start: 132, pos_end: 140,
@@ -1101,7 +1101,7 @@ export const section_transaction = /* #__PURE__ */ {
 //
 
 export const field_25 = {len: 35, pos_start: 242, pos_end: 277,
-    idx: 25, name: "First Name", path: ["First_Name"], fafsa_category: "Student Identity \n1a", non_content: true, 
+    idx: 25, name: "First Name", path: ["First_Name"], fafsa_category: ["1a","Student Identity"], non_content: true, 
     note: [
         "First character must contain a letter and second character must be non-numeric",
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
@@ -1113,7 +1113,7 @@ export const field_25 = {len: 35, pos_start: 242, pos_end: 277,
     ]};
 
 export const field_26 = {len: 15, pos_start: 277, pos_end: 292,
-    idx: 26, name: "Middle Name", path: ["Middle_Name"], fafsa_category: "1b", non_content: true, 
+    idx: 26, name: "Middle Name", path: ["Middle_Name"], fafsa_category: ["1b"], non_content: true, 
     note: [
         "First character must contain a letter",
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
@@ -1125,7 +1125,7 @@ export const field_26 = {len: 15, pos_start: 277, pos_end: 292,
     ]};
 
 export const field_27 = {len: 35, pos_start: 292, pos_end: 327,
-    idx: 27, name: "Last Name", path: ["Last_Name"], fafsa_category: "1c", non_content: true, 
+    idx: 27, name: "Last Name", path: ["Last_Name"], fafsa_category: ["1c"], non_content: true, 
     note: [
         "First character must contain a letter and second character must be non-numeric",
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
@@ -1136,7 +1136,7 @@ export const field_27 = {len: 35, pos_start: 292, pos_end: 327,
     ]};
 
 export const field_28 = {len: 10, pos_start: 327, pos_end: 337,
-    idx: 28, name: "Suffix", path: ["Suffix"], fafsa_category: "1d", non_content: true, 
+    idx: 28, name: "Suffix", path: ["Suffix"], fafsa_category: ["1d"], non_content: true, 
     note: [
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
         ". (period)",
@@ -1147,7 +1147,7 @@ export const field_28 = {len: 10, pos_start: 327, pos_end: 337,
     ]};
 
 export const field_29 = {len: 8, pos_start: 337, pos_end: 345,
-    idx: 29, name: "Date of Birth", path: ["Date_of_Birth"], fafsa_category: "1e", 
+    idx: 29, name: "Date of Birth", path: ["Date_of_Birth"], fafsa_category: ["1e"], 
     validate: _validate_date,
     "options":[{"op":"range","min":"19000101","max":"20251231"}],
     note: [
@@ -1166,11 +1166,12 @@ export const field_29 = {len: 8, pos_start: 337, pos_end: 345,
         " 09\t01-30",
         " 10\t01-31",
         " 11\t01-30",
-        " 12\t01-31"
+        " 12\t01-31",
+        "Blank"
     ]};
 
 export const field_30 = {len: 9, pos_start: 345, pos_end: 354,
-    idx: 30, name: "Social Security Number", path: ["Social_Security_Number"], fafsa_category: "1f", 
+    idx: 30, name: "Social Security Number", path: ["Social_Security_Number"], fafsa_category: ["1f"], 
     extra: ["Pseudo SSNs created in a cycle prior to 2024–25 will begin with 666","Pseudo SSNs created in the 2024–25 cycle will begin with 000"],
     validate: _validate_options,
     options: [
@@ -1181,7 +1182,7 @@ export const field_30 = {len: 9, pos_start: 345, pos_end: 354,
     ]};
 
 export const field_31 = {len: 9, pos_start: 354, pos_end: 363,
-    idx: 31, name: "ITIN", path: ["ITIN"], fafsa_category: "1g", 
+    idx: 31, name: "ITIN", path: ["ITIN"], fafsa_category: ["1g"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"900000000","max":"999999999"},
@@ -1192,7 +1193,7 @@ export const field_31 = {len: 9, pos_start: 354, pos_end: 363,
     ]};
 
 export const field_32 = {len: 10, pos_start: 363, pos_end: 373,
-    idx: 32, name: "Phone Number", path: ["Phone_Number"], fafsa_category: "Student Contact Information\n2a", 
+    idx: 32, name: "Phone Number", path: ["Phone_Number"], fafsa_category: ["2a","Student Contact Information"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0000000000","max":"9999999999"},
@@ -1203,7 +1204,7 @@ export const field_32 = {len: 10, pos_start: 363, pos_end: 373,
     ]};
 
 export const field_33 = {len: 50, pos_start: 373, pos_end: 423,
-    idx: 33, name: "Email Address", path: ["Email_Address"], fafsa_category: "2b", 
+    idx: 33, name: "Email Address", path: ["Email_Address"], fafsa_category: ["2b"], 
     validate: _validate_options,
     options: [
       {op: "email", },
@@ -1222,7 +1223,7 @@ export const field_33 = {len: 50, pos_start: 373, pos_end: 423,
     ]};
 
 export const field_34 = {len: 40, pos_start: 423, pos_end: 463,
-    idx: 34, name: "Street Address", path: ["Street_Address"], fafsa_category: "2c", non_content: true, 
+    idx: 34, name: "Street Address", path: ["Street_Address"], fafsa_category: ["2c"], non_content: true, 
     note: [
         "If non-blank, first character must be non-blank.",
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
@@ -1239,7 +1240,7 @@ export const field_34 = {len: 40, pos_start: 423, pos_end: 463,
     ]};
 
 export const field_35 = {len: 30, pos_start: 463, pos_end: 493,
-    idx: 35, name: "City", path: ["City"], fafsa_category: "2d", non_content: true, 
+    idx: 35, name: "City", path: ["City"], fafsa_category: ["2d"], non_content: true, 
     note: [
         "If non-blank, first character must be non-blank.",
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
@@ -1253,7 +1254,7 @@ export const field_35 = {len: 30, pos_start: 463, pos_end: 493,
     ]};
 
 export const field_36 = {len: 2, pos_start: 493, pos_end: 495,
-    idx: 36, name: "State", path: ["State"], fafsa_category: "2e", 
+    idx: 36, name: "State", path: ["State"], fafsa_category: ["2e"], 
     validate: _validate_state_codes,
     note: [
         "Valid two letter code (See State Codes)",
@@ -1261,7 +1262,7 @@ export const field_36 = {len: 2, pos_start: 493, pos_end: 495,
     ]};
 
 export const field_37 = {len: 10, pos_start: 495, pos_end: 505,
-    idx: 37, name: "Zip Code", path: ["Zip_Code"], fafsa_category: "2f", 
+    idx: 37, name: "Zip Code", path: ["Zip_Code"], fafsa_category: ["2f"], 
     validate: _validate_options,
     options: [
       {op: "alphanumeric", },
@@ -1274,7 +1275,7 @@ export const field_37 = {len: 10, pos_start: 495, pos_end: 505,
     ]};
 
 export const field_38 = {len: 2, pos_start: 505, pos_end: 507,
-    idx: 38, name: "Country", path: ["Country"], fafsa_category: "2g", 
+    idx: 38, name: "Country", path: ["Country"], fafsa_category: ["2g"], 
     validate: _validate_country_codes,
     note: [
         "Valid two letter code (See Country Codes)",
@@ -1302,7 +1303,7 @@ export const section_student_identity = /* #__PURE__ */ {
 //
 
 export const field_40 = {len: 1, pos_start: 557, pos_end: 558,
-    idx: 40, name: "Marital Status", path: ["Marital_Status"], fafsa_category: "Student Marital Status\n3", 
+    idx: 40, name: "Marital Status", path: ["Marital_Status"], fafsa_category: ["3","Student Marital Status"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1325,7 +1326,7 @@ export const field_40 = {len: 1, pos_start: 557, pos_end: 558,
     ]};
 
 export const field_41 = {len: 1, pos_start: 558, pos_end: 559,
-    idx: 41, name: "Grade Level in College 2024-25", path: ["Grade_Level_in_College"], fafsa_category: "Student College or Career School Plans\n4a", 
+    idx: 41, name: "Grade Level in College 2024-25", path: ["Grade_Level_in_College"], fafsa_category: ["4a","Student College or Career School Plans"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1344,7 +1345,7 @@ export const field_41 = {len: 1, pos_start: 558, pos_end: 559,
     ]};
 
 export const field_42 = {len: 1, pos_start: 559, pos_end: 560,
-    idx: 42, name: "First Bachelor's Degree Before 2024-25 School Year", path: ["First_Bachelors_Degree_Before_School_Year"], fafsa_category: "4b", 
+    idx: 42, name: "First Bachelor's Degree Before 2024-25 School Year", path: ["First_Bachelors_Degree_Before_School_Year"], fafsa_category: ["4b"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1359,7 +1360,7 @@ export const field_42 = {len: 1, pos_start: 559, pos_end: 560,
     ]};
 
 export const field_43 = {len: 1, pos_start: 560, pos_end: 561,
-    idx: 43, name: "Pursuing Teacher Certification?", path: ["Pursuing_Teacher_Certification"], fafsa_category: "4c", 
+    idx: 43, name: "Pursuing Teacher Certification?", path: ["Pursuing_Teacher_Certification"], fafsa_category: ["4c"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1374,7 +1375,7 @@ export const field_43 = {len: 1, pos_start: 560, pos_end: 561,
     ]};
 
 export const field_44 = {len: 1, pos_start: 561, pos_end: 562,
-    idx: 44, name: "Active Duty?", path: ["Active_Duty"], fafsa_category: "Student Personal Circumstances\n5a", 
+    idx: 44, name: "Active Duty?", path: ["Active_Duty"], fafsa_category: ["5a","Student Personal Circumstances"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1387,7 +1388,7 @@ export const field_44 = {len: 1, pos_start: 561, pos_end: 562,
     ]};
 
 export const field_45 = {len: 1, pos_start: 562, pos_end: 563,
-    idx: 45, name: "Veteran?", path: ["Veteran"], fafsa_category: "5b", 
+    idx: 45, name: "Veteran?", path: ["Veteran"], fafsa_category: ["5b"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1400,7 +1401,7 @@ export const field_45 = {len: 1, pos_start: 562, pos_end: 563,
     ]};
 
 export const field_46 = {len: 1, pos_start: 563, pos_end: 564,
-    idx: 46, name: "Child or Other Dependents?", path: ["Child_or_Other_Dependents"], fafsa_category: "5c", 
+    idx: 46, name: "Child or Other Dependents?", path: ["Child_or_Other_Dependents"], fafsa_category: ["5c"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1413,7 +1414,7 @@ export const field_46 = {len: 1, pos_start: 563, pos_end: 564,
     ]};
 
 export const field_47 = {len: 1, pos_start: 564, pos_end: 565,
-    idx: 47, name: "Parents Deceased?", path: ["Parents_Deceased"], fafsa_category: "5d", 
+    idx: 47, name: "Parents Deceased?", path: ["Parents_Deceased"], fafsa_category: ["5d"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1426,7 +1427,7 @@ export const field_47 = {len: 1, pos_start: 564, pos_end: 565,
     ]};
 
 export const field_48 = {len: 1, pos_start: 565, pos_end: 566,
-    idx: 48, name: "Ward of Court?", path: ["Ward_of_Court"], fafsa_category: "5e", 
+    idx: 48, name: "Ward of Court?", path: ["Ward_of_Court"], fafsa_category: ["5e"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1439,7 +1440,7 @@ export const field_48 = {len: 1, pos_start: 565, pos_end: 566,
     ]};
 
 export const field_49 = {len: 1, pos_start: 566, pos_end: 567,
-    idx: 49, name: "In Foster Care?", path: ["In_Foster_Care"], fafsa_category: "5f", 
+    idx: 49, name: "In Foster Care?", path: ["In_Foster_Care"], fafsa_category: ["5f"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1452,7 +1453,7 @@ export const field_49 = {len: 1, pos_start: 566, pos_end: 567,
     ]};
 
 export const field_50 = {len: 1, pos_start: 567, pos_end: 568,
-    idx: 50, name: "Emancipated Minor?", path: ["Emancipated_Minor"], fafsa_category: "5g", 
+    idx: 50, name: "Emancipated Minor?", path: ["Emancipated_Minor"], fafsa_category: ["5g"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1465,7 +1466,7 @@ export const field_50 = {len: 1, pos_start: 567, pos_end: 568,
     ]};
 
 export const field_51 = {len: 1, pos_start: 568, pos_end: 569,
-    idx: 51, name: "Legal Guardianship?", path: ["Legal_Guardianship"], fafsa_category: "5h", 
+    idx: 51, name: "Legal Guardianship?", path: ["Legal_Guardianship"], fafsa_category: ["5h"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1478,7 +1479,7 @@ export const field_51 = {len: 1, pos_start: 568, pos_end: 569,
     ]};
 
 export const field_52 = {len: 1, pos_start: 569, pos_end: 570,
-    idx: 52, name: "Personal Circumstances: None of the above", path: ["Personal_Circumstances_None_of_the_above"], fafsa_category: "5i", 
+    idx: 52, name: "Personal Circumstances: None of the above", path: ["Personal_Circumstances_None_of_the_above"], fafsa_category: ["5i"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1491,7 +1492,7 @@ export const field_52 = {len: 1, pos_start: 569, pos_end: 570,
     ]};
 
 export const field_53 = {len: 1, pos_start: 570, pos_end: 571,
-    idx: 53, name: "Unaccompanied Homeless Youth, or is Unaccompanied, At Risk of Homelessness, and Self-Supporting?", path: ["Unaccompanied_Homeless_Youth_or_is_Unaccompanied_At_Risk_of_Homelessness_and_Self_Supporting"], fafsa_category: "Student Other Circumstances\n6a", 
+    idx: 53, name: "Unaccompanied Homeless Youth, or is Unaccompanied, At Risk of Homelessness, and Self-Supporting?", path: ["Unaccompanied_Homeless_Youth_or_is_Unaccompanied_At_Risk_of_Homelessness_and_Self_Supporting"], fafsa_category: ["6a","Student Other Circumstances"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1506,7 +1507,7 @@ export const field_53 = {len: 1, pos_start: 570, pos_end: 571,
     ]};
 
 export const field_54 = {len: 1, pos_start: 571, pos_end: 572,
-    idx: 54, name: "Unaccompanied and Homeless (General)?", path: ["Unaccompanied_and_Homeless_General"], fafsa_category: "6b", 
+    idx: 54, name: "Unaccompanied and Homeless (General)?", path: ["Unaccompanied_and_Homeless_General"], fafsa_category: ["6b"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1519,7 +1520,7 @@ export const field_54 = {len: 1, pos_start: 571, pos_end: 572,
     ]};
 
 export const field_55 = {len: 1, pos_start: 572, pos_end: 573,
-    idx: 55, name: "Unaccompanied and Homeless (HS)?", path: ["Unaccompanied_and_Homeless_HS"], fafsa_category: "6c", 
+    idx: 55, name: "Unaccompanied and Homeless (HS)?", path: ["Unaccompanied_and_Homeless_HS"], fafsa_category: ["6c"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1532,7 +1533,7 @@ export const field_55 = {len: 1, pos_start: 572, pos_end: 573,
     ]};
 
 export const field_56 = {len: 1, pos_start: 573, pos_end: 574,
-    idx: 56, name: "Unaccompanied and Homeless (TRIO)?", path: ["Unaccompanied_and_Homeless_TRIO"], fafsa_category: "6d", 
+    idx: 56, name: "Unaccompanied and Homeless (TRIO)?", path: ["Unaccompanied_and_Homeless_TRIO"], fafsa_category: ["6d"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1545,7 +1546,7 @@ export const field_56 = {len: 1, pos_start: 573, pos_end: 574,
     ]};
 
 export const field_57 = {len: 1, pos_start: 574, pos_end: 575,
-    idx: 57, name: "Unaccompanied and Homeless (FAA)?", path: ["Unaccompanied_and_Homeless_FAA"], fafsa_category: "6e", 
+    idx: 57, name: "Unaccompanied and Homeless (FAA)?", path: ["Unaccompanied_and_Homeless_FAA"], fafsa_category: ["6e"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1558,7 +1559,7 @@ export const field_57 = {len: 1, pos_start: 574, pos_end: 575,
     ]};
 
 export const field_58 = {len: 1, pos_start: 575, pos_end: 576,
-    idx: 58, name: "Other Circumstances: None of the Above", path: ["Other_Circumstances_None_of_the_Above"], fafsa_category: "6f", 
+    idx: 58, name: "Other Circumstances: None of the Above", path: ["Other_Circumstances_None_of_the_Above"], fafsa_category: ["6f"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1571,7 +1572,7 @@ export const field_58 = {len: 1, pos_start: 575, pos_end: 576,
     ]};
 
 export const field_59 = {len: 1, pos_start: 576, pos_end: 577,
-    idx: 59, name: "Unusual Circumstance?", path: ["Unusual_Circumstance"], fafsa_category: "Student Unusual Circumstances\n7", 
+    idx: 59, name: "Unusual Circumstance?", path: ["Unusual_Circumstance"], fafsa_category: ["7","Student Unusual Circumstances"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1586,7 +1587,7 @@ export const field_59 = {len: 1, pos_start: 576, pos_end: 577,
     ]};
 
 export const field_60 = {len: 1, pos_start: 577, pos_end: 578,
-    idx: 60, name: "Unsub Only", path: ["Unsub_Only"], fafsa_category: "Apply for a Direct Unsubsidized Loan Only\n8", 
+    idx: 60, name: "Unsub Only", path: ["Unsub_Only"], fafsa_category: ["8","Apply for a Direct Unsubsidized Loan Only"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1601,7 +1602,7 @@ export const field_60 = {len: 1, pos_start: 577, pos_end: 578,
     ]};
 
 export const field_61 = {len: 2, pos_start: 578, pos_end: 580,
-    idx: 61, name: "Updated Family Size", path: ["Updated_Family_Size"], fafsa_category: "Family Size \n9", 
+    idx: 61, name: "Updated Family Size", path: ["Updated_Family_Size"], fafsa_category: ["9","Family Size"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99"},
@@ -1612,7 +1613,7 @@ export const field_61 = {len: 2, pos_start: 578, pos_end: 580,
     ]};
 
 export const field_62 = {len: 2, pos_start: 580, pos_end: 582,
-    idx: 62, name: "Number in College", path: ["Number_in_College"], fafsa_category: "Number in College\n10", 
+    idx: 62, name: "Number in College", path: ["Number_in_College"], fafsa_category: ["10","Number in College"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99"},
@@ -1635,7 +1636,7 @@ export const section_student_non_financial = /* #__PURE__ */ {
 //
 
 export const field_63 = {len: 1, pos_start: 582, pos_end: 583,
-    idx: 63, name: "Citizenship Status", path: ["Citizenship_Status"], fafsa_category: "Student Citizenship Status\n13a", 
+    idx: 63, name: "Citizenship Status", path: ["Citizenship_Status"], fafsa_category: ["13a","Student Citizenship Status"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1652,7 +1653,7 @@ export const field_63 = {len: 1, pos_start: 582, pos_end: 583,
     ]};
 
 export const field_64 = {len: 9, pos_start: 583, pos_end: 592,
-    idx: 64, name: "A-Number", path: ["A_Number"], fafsa_category: "13b", 
+    idx: 64, name: "A-Number", path: ["A_Number"], fafsa_category: ["13b"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"000000001","max":"999999999"},
@@ -1663,7 +1664,7 @@ export const field_64 = {len: 9, pos_start: 583, pos_end: 592,
     ]};
 
 export const field_65 = {len: 2, pos_start: 592, pos_end: 594,
-    idx: 65, name: "State of Legal Residence", path: ["State_of_Legal_Residence"], fafsa_category: "Student State of Legal Residence \n14a", 
+    idx: 65, name: "State of Legal Residence", path: ["State_of_Legal_Residence"], fafsa_category: ["14a","Student State of Legal Residence"], 
     validate: _validate_state_codes,
     note: [
         "Valid two letter code (See State Codes)",
@@ -1671,7 +1672,7 @@ export const field_65 = {len: 2, pos_start: 592, pos_end: 594,
     ]};
 
 export const field_66 = {len: 6, pos_start: 594, pos_end: 600,
-    idx: 66, name: "Legal Residence Date", path: ["Legal_Residence_Date"], fafsa_category: "14b", 
+    idx: 66, name: "Legal Residence Date", path: ["Legal_Residence_Date"], fafsa_category: ["14b"], 
     validate: _validate_yearmonth,
     "allow_blank":true,"options":[{"op":"range","min":"190001","max":"20251231"}],
     note: [
@@ -1681,7 +1682,7 @@ export const field_66 = {len: 6, pos_start: 594, pos_end: 600,
     ]};
 
 export const field_67 = {len: 1, pos_start: 600, pos_end: 601,
-    idx: 67, name: "Either Parent Attend College", path: ["Either_Parent_Attend_College"], fafsa_category: "Parent Education Status\n15", 
+    idx: 67, name: "Either Parent Attend College", path: ["Either_Parent_Attend_College"], fafsa_category: ["15","Parent Education Status"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1700,7 +1701,7 @@ export const field_67 = {len: 1, pos_start: 600, pos_end: 601,
     ]};
 
 export const field_68 = {len: 1, pos_start: 601, pos_end: 602,
-    idx: 68, name: "Parent Killed in the Line of Duty", path: ["Parent_Killed_in_the_Line_of_Duty"], fafsa_category: "Parent Killed in Line of Duty \n16", 
+    idx: 68, name: "Parent Killed in the Line of Duty", path: ["Parent_Killed_in_the_Line_of_Duty"], fafsa_category: ["16","Parent Killed in Line of Duty"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1715,7 +1716,7 @@ export const field_68 = {len: 1, pos_start: 601, pos_end: 602,
     ]};
 
 export const field_69 = {len: 1, pos_start: 602, pos_end: 603,
-    idx: 69, name: "High School Completion Status", path: ["High_School_Completion_Status"], fafsa_category: "Student High School Information\n17a", 
+    idx: 69, name: "High School Completion Status", path: ["High_School_Completion_Status"], fafsa_category: ["17a","Student High School Information"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1734,7 +1735,7 @@ export const field_69 = {len: 1, pos_start: 602, pos_end: 603,
     ]};
 
 export const field_70 = {len: 60, pos_start: 603, pos_end: 663,
-    idx: 70, name: "High School Name", path: ["High_School_Name"], fafsa_category: "17b", non_content: true, 
+    idx: 70, name: "High School Name", path: ["High_School_Name"], fafsa_category: ["17b"], non_content: true, 
     note: [
         "Alphanumeric; 0 to 9, uppercase and lowercase A to Z",
         " . (period)",
@@ -1755,7 +1756,7 @@ export const field_70 = {len: 60, pos_start: 603, pos_end: 663,
     ]};
 
 export const field_71 = {len: 28, pos_start: 663, pos_end: 691,
-    idx: 71, name: "High School City", path: ["High_School_City"], fafsa_category: "17c", non_content: true, 
+    idx: 71, name: "High School City", path: ["High_School_City"], fafsa_category: ["17c"], non_content: true, 
     note: [
         "If non-blank, first character must be non-blank.",
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
@@ -1770,7 +1771,7 @@ export const field_71 = {len: 28, pos_start: 663, pos_end: 691,
     ]};
 
 export const field_72 = {len: 2, pos_start: 691, pos_end: 693,
-    idx: 72, name: "High School State", path: ["High_School_State"], fafsa_category: "17d", 
+    idx: 72, name: "High School State", path: ["High_School_State"], fafsa_category: ["17d"], 
     validate: _validate_state_codes,
     note: [
         "Valid two letter code (See State Codes)",
@@ -1778,7 +1779,7 @@ export const field_72 = {len: 2, pos_start: 691, pos_end: 693,
     ]};
 
 export const field_73 = {len: 1, pos_start: 693, pos_end: 694,
-    idx: 73, name: "High School Equivalent Diploma Name", path: ["High_School_Equivalent_Diploma_Name"], fafsa_category: "17e", 
+    idx: 73, name: "High School Equivalent Diploma Name", path: ["High_School_Equivalent_Diploma_Name"], fafsa_category: ["17e"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1797,7 +1798,7 @@ export const field_73 = {len: 1, pos_start: 693, pos_end: 694,
     ]};
 
 export const field_74 = {len: 2, pos_start: 694, pos_end: 696,
-    idx: 74, name: "High School Equivalent Diploma State", path: ["High_School_Equivalent_Diploma_State"], fafsa_category: "17f", 
+    idx: 74, name: "High School Equivalent Diploma State", path: ["High_School_Equivalent_Diploma_State"], fafsa_category: ["17f"], 
     validate: _validate_state_codes,
     note: [
         "Valid two letter code (See State Codes)",
@@ -1817,7 +1818,7 @@ export const section_student_demographic = /* #__PURE__ */ {
 //
 
 export const field_75 = {len: 1, pos_start: 696, pos_end: 697,
-    idx: 75, name: "Received EITC", path: ["Received_EITC"], fafsa_category: "Federal Benefits Received\n18a", 
+    idx: 75, name: "Received EITC", path: ["Received_EITC"], fafsa_category: ["18a","Federal Benefits Received"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1830,7 +1831,7 @@ export const field_75 = {len: 1, pos_start: 696, pos_end: 697,
     ]};
 
 export const field_76 = {len: 1, pos_start: 697, pos_end: 698,
-    idx: 76, name: "Received Federal Housing Assistance", path: ["Received_Federal_Housing_Assistance"], fafsa_category: "18b", 
+    idx: 76, name: "Received Federal Housing Assistance", path: ["Received_Federal_Housing_Assistance"], fafsa_category: ["18b"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1843,7 +1844,7 @@ export const field_76 = {len: 1, pos_start: 697, pos_end: 698,
     ]};
 
 export const field_77 = {len: 1, pos_start: 698, pos_end: 699,
-    idx: 77, name: "Received Free/Reduced Price Lunch", path: ["Received_FreeReduced_Price_Lunch"], fafsa_category: "18c", 
+    idx: 77, name: "Received Free/Reduced Price Lunch", path: ["Received_FreeReduced_Price_Lunch"], fafsa_category: ["18c"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1856,7 +1857,7 @@ export const field_77 = {len: 1, pos_start: 698, pos_end: 699,
     ]};
 
 export const field_78 = {len: 1, pos_start: 699, pos_end: 700,
-    idx: 78, name: "Received Medicaid", path: ["Received_Medicaid"], fafsa_category: "18d", 
+    idx: 78, name: "Received Medicaid", path: ["Received_Medicaid"], fafsa_category: ["18d"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1869,7 +1870,7 @@ export const field_78 = {len: 1, pos_start: 699, pos_end: 700,
     ]};
 
 export const field_79 = {len: 1, pos_start: 700, pos_end: 701,
-    idx: 79, name: "Received Refundable Credit for 36B Health Plan", path: ["Received_Refundable_Credit_for_36B_Health_Plan"], fafsa_category: "18e", 
+    idx: 79, name: "Received Refundable Credit for 36B Health Plan", path: ["Received_Refundable_Credit_for_36B_Health_Plan"], fafsa_category: ["18e"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1882,7 +1883,7 @@ export const field_79 = {len: 1, pos_start: 700, pos_end: 701,
     ]};
 
 export const field_80 = {len: 1, pos_start: 701, pos_end: 702,
-    idx: 80, name: "Received SNAP", path: ["Received_SNAP"], fafsa_category: "18f", 
+    idx: 80, name: "Received SNAP", path: ["Received_SNAP"], fafsa_category: ["18f"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1895,7 +1896,7 @@ export const field_80 = {len: 1, pos_start: 701, pos_end: 702,
     ]};
 
 export const field_81 = {len: 1, pos_start: 702, pos_end: 703,
-    idx: 81, name: "Received Supplemental Security Income", path: ["Received_Supplemental_Security_Income"], fafsa_category: "18g", 
+    idx: 81, name: "Received Supplemental Security Income", path: ["Received_Supplemental_Security_Income"], fafsa_category: ["18g"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1908,7 +1909,7 @@ export const field_81 = {len: 1, pos_start: 702, pos_end: 703,
     ]};
 
 export const field_82 = {len: 1, pos_start: 703, pos_end: 704,
-    idx: 82, name: "Received TANF", path: ["Received_TANF"], fafsa_category: "18h", 
+    idx: 82, name: "Received TANF", path: ["Received_TANF"], fafsa_category: ["18h"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1921,7 +1922,7 @@ export const field_82 = {len: 1, pos_start: 703, pos_end: 704,
     ]};
 
 export const field_83 = {len: 1, pos_start: 704, pos_end: 705,
-    idx: 83, name: "Received WIC", path: ["Received_WIC"], fafsa_category: "18i", 
+    idx: 83, name: "Received WIC", path: ["Received_WIC"], fafsa_category: ["18i"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1934,7 +1935,7 @@ export const field_83 = {len: 1, pos_start: 704, pos_end: 705,
     ]};
 
 export const field_84 = {len: 1, pos_start: 705, pos_end: 706,
-    idx: 84, name: "Federal Benefits: None of the Above", path: ["Federal_Benefits_None_of_the_Above"], fafsa_category: "18j", 
+    idx: 84, name: "Federal Benefits: None of the Above", path: ["Federal_Benefits_None_of_the_Above"], fafsa_category: ["18j"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1947,7 +1948,7 @@ export const field_84 = {len: 1, pos_start: 705, pos_end: 706,
     ]};
 
 export const field_85 = {len: 1, pos_start: 706, pos_end: 707,
-    idx: 85, name: "Filed 1040 or 1040NR", path: ["Filed_1040_or_1040NR"], fafsa_category: "Student Tax Filing Status\n19a", 
+    idx: 85, name: "Filed 1040 or 1040NR", path: ["Filed_1040_or_1040NR"], fafsa_category: ["19a","Student Tax Filing Status"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1962,7 +1963,7 @@ export const field_85 = {len: 1, pos_start: 706, pos_end: 707,
     ]};
 
 export const field_86 = {len: 1, pos_start: 707, pos_end: 708,
-    idx: 86, name: "Filed Non-U.S. Tax Return", path: ["Filed_Non_US_Tax_Return"], fafsa_category: "19b", 
+    idx: 86, name: "Filed Non-U.S. Tax Return", path: ["Filed_Non_US_Tax_Return"], fafsa_category: ["19b"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1977,7 +1978,7 @@ export const field_86 = {len: 1, pos_start: 707, pos_end: 708,
     ]};
 
 export const field_87 = {len: 1, pos_start: 708, pos_end: 709,
-    idx: 87, name: "Filed Joint Return With Current Spouse", path: ["Filed_Joint_Return_With_Current_Spouse"], fafsa_category: "19c", 
+    idx: 87, name: "Filed Joint Return With Current Spouse", path: ["Filed_Joint_Return_With_Current_Spouse"], fafsa_category: ["19c"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -1992,7 +1993,7 @@ export const field_87 = {len: 1, pos_start: 708, pos_end: 709,
     ]};
 
 export const field_88 = {len: 1, pos_start: 709, pos_end: 710,
-    idx: 88, name: "Tax Return Filing Status", path: ["Tax_Return_Filing_Status"], fafsa_category: "Student 20xx Tax Return Information\n20a", 
+    idx: 88, name: "Tax Return Filing Status", path: ["Tax_Return_Filing_Status"], fafsa_category: ["20a","Student 20xx Tax Return Information"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -2000,7 +2001,7 @@ export const field_88 = {len: 1, pos_start: 709, pos_end: 710,
         "2": "Married-Filed Joint Return",
         "3": "Married-Filed Separate Return",
         "4": "Head of Household",
-        "5": "Qualifying Surviving Spouse",
+        "5": "Qualifying surviving spouse",
       }},
     ],
     note: [
@@ -2008,12 +2009,12 @@ export const field_88 = {len: 1, pos_start: 709, pos_end: 710,
         "2 = Married-Filed Joint Return",
         "3 = Married-Filed Separate Return",
         "4 = Head of Household",
-        "5 = Qualifying Surviving Spouse",
+        "5 = Qualifying surviving spouse",
         "Blank"
     ]};
 
 export const field_89 = {len: 11, pos_start: 710, pos_end: 721,
-    idx: 89, name: "Income Earned from Work", path: ["Income_Earned_from_Work"], fafsa_category: "20b", 
+    idx: 89, name: "Income Earned from Work", path: ["Income_Earned_from_Work"], fafsa_category: ["20b"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -2024,7 +2025,7 @@ export const field_89 = {len: 11, pos_start: 710, pos_end: 721,
     ]};
 
 export const field_90 = {len: 11, pos_start: 721, pos_end: 732,
-    idx: 90, name: "Tax Exempt Interest Income", path: ["Tax_Exempt_Interest_Income"], fafsa_category: "20c", 
+    idx: 90, name: "Tax Exempt Interest Income", path: ["Tax_Exempt_Interest_Income"], fafsa_category: ["20c"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -2035,7 +2036,7 @@ export const field_90 = {len: 11, pos_start: 721, pos_end: 732,
     ]};
 
 export const field_91 = {len: 11, pos_start: 732, pos_end: 743,
-    idx: 91, name: "Untaxed Portions of IRA Distributions", path: ["Untaxed_Portions_of_IRA_Distributions"], fafsa_category: "20d", 
+    idx: 91, name: "Untaxed Portions of IRA Distributions", path: ["Untaxed_Portions_of_IRA_Distributions"], fafsa_category: ["20d"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -2046,7 +2047,7 @@ export const field_91 = {len: 11, pos_start: 732, pos_end: 743,
     ]};
 
 export const field_92 = {len: 11, pos_start: 743, pos_end: 754,
-    idx: 92, name: "IRA Rollover", path: ["IRA_Rollover"], fafsa_category: "20e", 
+    idx: 92, name: "IRA Rollover", path: ["IRA_Rollover"], fafsa_category: ["20e"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -2057,7 +2058,7 @@ export const field_92 = {len: 11, pos_start: 743, pos_end: 754,
     ]};
 
 export const field_93 = {len: 11, pos_start: 754, pos_end: 765,
-    idx: 93, name: "Untaxed Portions of Pensions", path: ["Untaxed_Portions_of_Pensions"], fafsa_category: "20f", 
+    idx: 93, name: "Untaxed Portions of Pensions", path: ["Untaxed_Portions_of_Pensions"], fafsa_category: ["20f"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -2068,7 +2069,7 @@ export const field_93 = {len: 11, pos_start: 754, pos_end: 765,
     ]};
 
 export const field_94 = {len: 11, pos_start: 765, pos_end: 776,
-    idx: 94, name: "Pension Rollover", path: ["Pension_Rollover"], fafsa_category: "20g", 
+    idx: 94, name: "Pension Rollover", path: ["Pension_Rollover"], fafsa_category: ["20g"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -2079,7 +2080,7 @@ export const field_94 = {len: 11, pos_start: 765, pos_end: 776,
     ]};
 
 export const field_95 = {len: 10, pos_start: 776, pos_end: 786,
-    idx: 95, name: "Adjusted Gross Income", path: ["Adjusted_Gross_Income"], fafsa_category: "20h", 
+    idx: 95, name: "Adjusted Gross Income", path: ["Adjusted_Gross_Income"], fafsa_category: ["20h"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"-999999999","max":"999999999"},
@@ -2090,7 +2091,7 @@ export const field_95 = {len: 10, pos_start: 776, pos_end: 786,
     ]};
 
 export const field_96 = {len: 9, pos_start: 786, pos_end: 795,
-    idx: 96, name: "Income Tax Paid", path: ["Income_Tax_Paid"], fafsa_category: "20i", 
+    idx: 96, name: "Income Tax Paid", path: ["Income_Tax_Paid"], fafsa_category: ["20i"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"999999999"},
@@ -2101,7 +2102,7 @@ export const field_96 = {len: 9, pos_start: 786, pos_end: 795,
     ]};
 
 export const field_97 = {len: 1, pos_start: 795, pos_end: 796,
-    idx: 97, name: "Earned Income Tax Credit Received During Tax Year?", path: ["Earned_Income_Tax_Credit_Received_During_Tax_Year"], fafsa_category: "20j", 
+    idx: 97, name: "Earned Income Tax Credit Received During Tax Year?", path: ["Earned_Income_Tax_Credit_Received_During_Tax_Year"], fafsa_category: ["20j"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -2118,7 +2119,7 @@ export const field_97 = {len: 1, pos_start: 795, pos_end: 796,
     ]};
 
 export const field_98 = {len: 11, pos_start: 796, pos_end: 807,
-    idx: 98, name: "Deductible Payments to IRA, Keogh, Other", path: ["Deductible_Payments_to_IRA_Keogh_Other"], fafsa_category: "20k", 
+    idx: 98, name: "Deductible Payments to IRA, Keogh, Other", path: ["Deductible_Payments_to_IRA_Keogh_Other"], fafsa_category: ["20k"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -2129,7 +2130,7 @@ export const field_98 = {len: 11, pos_start: 796, pos_end: 807,
     ]};
 
 export const field_99 = {len: 9, pos_start: 807, pos_end: 816,
-    idx: 99, name: "Education Credits", path: ["Education_Credits"], fafsa_category: "20l", 
+    idx: 99, name: "Education Credits", path: ["Education_Credits"], fafsa_category: ["20l"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"999999999"},
@@ -2140,7 +2141,7 @@ export const field_99 = {len: 9, pos_start: 807, pos_end: 816,
     ]};
 
 export const field_100 = {len: 1, pos_start: 816, pos_end: 817,
-    idx: 100, name: "Filed Schedule A, B, D, E, F or H?", path: ["Filed_Schedule_A_B_D_E_F_or_H"], fafsa_category: "20m", 
+    idx: 100, name: "Filed Schedule A, B, D, E, F or H?", path: ["Filed_Schedule_A_B_D_E_F_or_H"], fafsa_category: ["20m"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -2157,7 +2158,7 @@ export const field_100 = {len: 1, pos_start: 816, pos_end: 817,
     ]};
 
 export const field_101 = {len: 12, pos_start: 817, pos_end: 829,
-    idx: 101, name: "Schedule C Amount", path: ["Schedule_C_Amount"], fafsa_category: "20n", 
+    idx: 101, name: "Schedule C Amount", path: ["Schedule_C_Amount"], fafsa_category: ["20n"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"-99999999999","max":"99999999999"},
@@ -2168,7 +2169,7 @@ export const field_101 = {len: 12, pos_start: 817, pos_end: 829,
     ]};
 
 export const field_102 = {len: 7, pos_start: 829, pos_end: 836,
-    idx: 102, name: "College Grant and Scholarship Aid", path: ["College_Grant_and_Scholarship_Aid"], fafsa_category: "20o", 
+    idx: 102, name: "College Grant and Scholarship Aid", path: ["College_Grant_and_Scholarship_Aid"], fafsa_category: ["20o"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"9999999"},
@@ -2179,7 +2180,7 @@ export const field_102 = {len: 7, pos_start: 829, pos_end: 836,
     ]};
 
 export const field_103 = {len: 10, pos_start: 836, pos_end: 846,
-    idx: 103, name: "Foreign Earned Income Exclusion", path: ["Foreign_Earned_Income_Exclusion"], fafsa_category: "20p", 
+    idx: 103, name: "Foreign Earned Income Exclusion", path: ["Foreign_Earned_Income_Exclusion"], fafsa_category: ["20p"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"-999999999","max":"999999999"},
@@ -2190,7 +2191,7 @@ export const field_103 = {len: 10, pos_start: 836, pos_end: 846,
     ]};
 
 export const field_104 = {len: 7, pos_start: 846, pos_end: 853,
-    idx: 104, name: "Child Support Received", path: ["Child_Support_Received"], fafsa_category: "Annual Child Support Received \n21", 
+    idx: 104, name: "Child Support Received", path: ["Child_Support_Received"], fafsa_category: ["21","Annual Child Support Received"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"9999999"},
@@ -2201,7 +2202,7 @@ export const field_104 = {len: 7, pos_start: 846, pos_end: 853,
     ]};
 
 export const field_105 = {len: 7, pos_start: 853, pos_end: 860,
-    idx: 105, name: "Total of Cash, Savings, and Checking Accounts", path: ["Total_of_Cash_Savings_and_Checking_Accounts"], fafsa_category: "Student Assets\n22a", 
+    idx: 105, name: "Total of Cash, Savings, and Checking Accounts", path: ["Total_of_Cash_Savings_and_Checking_Accounts"], fafsa_category: ["22a","Student Assets"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"9999999"},
@@ -2212,7 +2213,7 @@ export const field_105 = {len: 7, pos_start: 853, pos_end: 860,
     ]};
 
 export const field_106 = {len: 7, pos_start: 860, pos_end: 867,
-    idx: 106, name: "Net Worth of Current Investments", path: ["Net_Worth_of_Current_Investments"], fafsa_category: "22b", 
+    idx: 106, name: "Net Worth of Current Investments", path: ["Net_Worth_of_Current_Investments"], fafsa_category: ["22b"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"9999999"},
@@ -2223,7 +2224,7 @@ export const field_106 = {len: 7, pos_start: 860, pos_end: 867,
     ]};
 
 export const field_107 = {len: 7, pos_start: 867, pos_end: 874,
-    idx: 107, name: "Net Worth of Businesses and Investment Farms", path: ["Net_Worth_of_Businesses_and_Investment_Farms"], fafsa_category: "22c", 
+    idx: 107, name: "Net Worth of Businesses and Investment Farms", path: ["Net_Worth_of_Businesses_and_Investment_Farms"], fafsa_category: ["22c"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"9999999"},
@@ -2246,7 +2247,7 @@ export const section_student_financial_manual = /* #__PURE__ */ {
 //
 
 export const field_108 = {len: 6, pos_start: 874, pos_end: 880,
-    idx: 108, name: "College #1", path: ["College_1"], fafsa_category: "Colleges\n23a", 
+    idx: 108, name: "College #1", path: ["College_1"], fafsa_category: ["23a","Colleges"], 
     validate: _validate_school_code,
     note: [
         "000000 to 099999",
@@ -2256,7 +2257,7 @@ export const field_108 = {len: 6, pos_start: 874, pos_end: 880,
     ]};
 
 export const field_109 = {len: 6, pos_start: 880, pos_end: 886,
-    idx: 109, name: "College #2", path: ["College_2"], fafsa_category: "23b", 
+    idx: 109, name: "College #2", path: ["College_2"], fafsa_category: ["23b"], 
     validate: _validate_school_code,
     note: [
         "000000 to 099999",
@@ -2266,7 +2267,7 @@ export const field_109 = {len: 6, pos_start: 880, pos_end: 886,
     ]};
 
 export const field_110 = {len: 6, pos_start: 886, pos_end: 892,
-    idx: 110, name: "College #3", path: ["College_3"], fafsa_category: "23c", 
+    idx: 110, name: "College #3", path: ["College_3"], fafsa_category: ["23c"], 
     validate: _validate_school_code,
     note: [
         "000000 to 099999",
@@ -2276,7 +2277,7 @@ export const field_110 = {len: 6, pos_start: 886, pos_end: 892,
     ]};
 
 export const field_111 = {len: 6, pos_start: 892, pos_end: 898,
-    idx: 111, name: "College #4", path: ["College_4"], fafsa_category: "23d", 
+    idx: 111, name: "College #4", path: ["College_4"], fafsa_category: ["23d"], 
     validate: _validate_school_code,
     note: [
         "000000 to 099999",
@@ -2286,7 +2287,7 @@ export const field_111 = {len: 6, pos_start: 892, pos_end: 898,
     ]};
 
 export const field_112 = {len: 6, pos_start: 898, pos_end: 904,
-    idx: 112, name: "College #5", path: ["College_5"], fafsa_category: "23e", 
+    idx: 112, name: "College #5", path: ["College_5"], fafsa_category: ["23e"], 
     validate: _validate_school_code,
     note: [
         "000000 to 099999",
@@ -2296,7 +2297,7 @@ export const field_112 = {len: 6, pos_start: 898, pos_end: 904,
     ]};
 
 export const field_113 = {len: 6, pos_start: 904, pos_end: 910,
-    idx: 113, name: "College #6", path: ["College_6"], fafsa_category: "23f", 
+    idx: 113, name: "College #6", path: ["College_6"], fafsa_category: ["23f"], 
     validate: _validate_school_code,
     note: [
         "000000 to 099999",
@@ -2306,7 +2307,7 @@ export const field_113 = {len: 6, pos_start: 904, pos_end: 910,
     ]};
 
 export const field_114 = {len: 6, pos_start: 910, pos_end: 916,
-    idx: 114, name: "College #7", path: ["College_7"], fafsa_category: "23g", 
+    idx: 114, name: "College #7", path: ["College_7"], fafsa_category: ["23g"], 
     validate: _validate_school_code,
     note: [
         "000000 to 099999",
@@ -2316,7 +2317,7 @@ export const field_114 = {len: 6, pos_start: 910, pos_end: 916,
     ]};
 
 export const field_115 = {len: 6, pos_start: 916, pos_end: 922,
-    idx: 115, name: "College #8", path: ["College_8"], fafsa_category: "23h", 
+    idx: 115, name: "College #8", path: ["College_8"], fafsa_category: ["23h"], 
     validate: _validate_school_code,
     note: [
         "000000 to 099999",
@@ -2326,7 +2327,7 @@ export const field_115 = {len: 6, pos_start: 916, pos_end: 922,
     ]};
 
 export const field_116 = {len: 6, pos_start: 922, pos_end: 928,
-    idx: 116, name: "College #9", path: ["College_9"], fafsa_category: "23i", 
+    idx: 116, name: "College #9", path: ["College_9"], fafsa_category: ["23i"], 
     validate: _validate_school_code,
     note: [
         "000000 to 099999",
@@ -2336,7 +2337,7 @@ export const field_116 = {len: 6, pos_start: 922, pos_end: 928,
     ]};
 
 export const field_117 = {len: 6, pos_start: 928, pos_end: 934,
-    idx: 117, name: "College #10", path: ["College_10"], fafsa_category: "23j", 
+    idx: 117, name: "College #10", path: ["College_10"], fafsa_category: ["23j"], 
     validate: _validate_school_code,
     note: [
         "000000 to 099999",
@@ -2346,7 +2347,7 @@ export const field_117 = {len: 6, pos_start: 928, pos_end: 934,
     ]};
 
 export const field_118 = {len: 6, pos_start: 934, pos_end: 940,
-    idx: 118, name: "College #11", path: ["College_11"], fafsa_category: "23k", 
+    idx: 118, name: "College #11", path: ["College_11"], fafsa_category: ["23k"], 
     validate: _validate_school_code,
     note: [
         "000000 to 099999",
@@ -2356,7 +2357,7 @@ export const field_118 = {len: 6, pos_start: 934, pos_end: 940,
     ]};
 
 export const field_119 = {len: 6, pos_start: 940, pos_end: 946,
-    idx: 119, name: "College #12", path: ["College_12"], fafsa_category: "23l", 
+    idx: 119, name: "College #12", path: ["College_12"], fafsa_category: ["23l"], 
     validate: _validate_school_code,
     note: [
         "000000 to 099999",
@@ -2366,7 +2367,7 @@ export const field_119 = {len: 6, pos_start: 940, pos_end: 946,
     ]};
 
 export const field_120 = {len: 6, pos_start: 946, pos_end: 952,
-    idx: 120, name: "College #13", path: ["College_13"], fafsa_category: "23m", 
+    idx: 120, name: "College #13", path: ["College_13"], fafsa_category: ["23m"], 
     validate: _validate_school_code,
     note: [
         "000000 to 099999",
@@ -2376,7 +2377,7 @@ export const field_120 = {len: 6, pos_start: 946, pos_end: 952,
     ]};
 
 export const field_121 = {len: 6, pos_start: 952, pos_end: 958,
-    idx: 121, name: "College #14", path: ["College_14"], fafsa_category: "23n", 
+    idx: 121, name: "College #14", path: ["College_14"], fafsa_category: ["23n"], 
     validate: _validate_school_code,
     note: [
         "000000 to 099999",
@@ -2386,7 +2387,7 @@ export const field_121 = {len: 6, pos_start: 952, pos_end: 958,
     ]};
 
 export const field_122 = {len: 6, pos_start: 958, pos_end: 964,
-    idx: 122, name: "College #15", path: ["College_15"], fafsa_category: "23o", 
+    idx: 122, name: "College #15", path: ["College_15"], fafsa_category: ["23o"], 
     validate: _validate_school_code,
     note: [
         "000000 to 099999",
@@ -2396,7 +2397,7 @@ export const field_122 = {len: 6, pos_start: 958, pos_end: 964,
     ]};
 
 export const field_123 = {len: 6, pos_start: 964, pos_end: 970,
-    idx: 123, name: "College #16", path: ["College_16"], fafsa_category: "23p", 
+    idx: 123, name: "College #16", path: ["College_16"], fafsa_category: ["23p"], 
     validate: _validate_school_code,
     note: [
         "000000 to 099999",
@@ -2406,7 +2407,7 @@ export const field_123 = {len: 6, pos_start: 964, pos_end: 970,
     ]};
 
 export const field_124 = {len: 6, pos_start: 970, pos_end: 976,
-    idx: 124, name: "College #17", path: ["College_17"], fafsa_category: "23q", 
+    idx: 124, name: "College #17", path: ["College_17"], fafsa_category: ["23q"], 
     validate: _validate_school_code,
     note: [
         "000000 to 099999",
@@ -2416,7 +2417,7 @@ export const field_124 = {len: 6, pos_start: 970, pos_end: 976,
     ]};
 
 export const field_125 = {len: 6, pos_start: 976, pos_end: 982,
-    idx: 125, name: "College #18", path: ["College_18"], fafsa_category: "23r", 
+    idx: 125, name: "College #18", path: ["College_18"], fafsa_category: ["23r"], 
     validate: _validate_school_code,
     note: [
         "000000 to 099999",
@@ -2426,7 +2427,7 @@ export const field_125 = {len: 6, pos_start: 976, pos_end: 982,
     ]};
 
 export const field_126 = {len: 6, pos_start: 982, pos_end: 988,
-    idx: 126, name: "College #19", path: ["College_19"], fafsa_category: "23s", 
+    idx: 126, name: "College #19", path: ["College_19"], fafsa_category: ["23s"], 
     validate: _validate_school_code,
     note: [
         "000000 to 099999",
@@ -2436,7 +2437,7 @@ export const field_126 = {len: 6, pos_start: 982, pos_end: 988,
     ]};
 
 export const field_127 = {len: 6, pos_start: 988, pos_end: 994,
-    idx: 127, name: "College #20", path: ["College_20"], fafsa_category: "23t", 
+    idx: 127, name: "College #20", path: ["College_20"], fafsa_category: ["23t"], 
     validate: _validate_school_code,
     note: [
         "000000 to 099999",
@@ -2446,7 +2447,7 @@ export const field_127 = {len: 6, pos_start: 988, pos_end: 994,
     ]};
 
 export const field_128 = {len: 1, pos_start: 994, pos_end: 995,
-    idx: 128, name: "Consent to Retrieve and Disclose FTI", path: ["Consent_to_Retrieve_and_Disclose_FTI"], fafsa_category: "Student Consent and Signature\n24a", 
+    idx: 128, name: "Consent to Retrieve and Disclose FTI", path: ["Consent_to_Retrieve_and_Disclose_FTI"], fafsa_category: ["24a","Student Consent, Approval, and Signature"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -2469,11 +2470,11 @@ export const section_student_schools = /* #__PURE__ */ {
 
 
 //*********************************************
-// Section: Student Consent and Signature
+// Section: Student Consent, Approval, and Signature
 //
 
 export const field_129 = {len: 1, pos_start: 995, pos_end: 996,
-    idx: 129, name: "Signature", path: ["Signature"], fafsa_category: "24b", 
+    idx: 129, name: "Signature", path: ["Signature"], fafsa_category: ["24b"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -2486,12 +2487,12 @@ export const field_129 = {len: 1, pos_start: 995, pos_end: 996,
     ]};
 
 export const field_130 = {len: 8, pos_start: 996, pos_end: 1004,
-    idx: 130, name: "Signature Date", path: ["Signature_Date"], fafsa_category: "24c", 
+    idx: 130, name: "Signature Date", path: ["Signature_Date"], fafsa_category: ["24c"], 
     validate: _validate_date,
-    "allow_blank":true,"options":[{"op":"range","min":"20231231","max":"20250930"}],
+    "allow_blank":true,"options":[{"op":"range","min":"20231227","max":"20250930"}],
     note: [
         "Format is CCYYMMDD",
-        "20231231 to 20250930",
+        "20231227 to 20250930",
         "Blank"
     ]};
 
@@ -2505,7 +2506,7 @@ export const field_131 = {len: 50, pos_start: 1004, pos_end: 1054,
 
 
 export const section_student_consent = /* #__PURE__ */ {
-    section: "Student Consent and Signature",
+    section: "Student Consent, Approval, and Signature",
     path: ["student","consent"],
     field_list: [field_129, field_130, field_131],
 }
@@ -2516,7 +2517,7 @@ export const section_student_consent = /* #__PURE__ */ {
 //
 
 export const field_132 = {len: 35, pos_start: 1054, pos_end: 1089,
-    idx: 132, name: "First Name", path: ["First_Name"], fafsa_category: "Student Spouse Identity Information\n25a", non_content: true, 
+    idx: 132, name: "First Name", path: ["First_Name"], fafsa_category: ["25a","Student Spouse Identity Information"], non_content: true, 
     note: [
         "First character must contain a letter and second character must be non-numeric",
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
@@ -2528,7 +2529,7 @@ export const field_132 = {len: 35, pos_start: 1054, pos_end: 1089,
     ]};
 
 export const field_133 = {len: 15, pos_start: 1089, pos_end: 1104,
-    idx: 133, name: "Middle Name", path: ["Middle_Name"], fafsa_category: "25b", non_content: true, 
+    idx: 133, name: "Middle Name", path: ["Middle_Name"], fafsa_category: ["25b"], non_content: true, 
     note: [
         "First character must contain a letter",
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
@@ -2540,7 +2541,7 @@ export const field_133 = {len: 15, pos_start: 1089, pos_end: 1104,
     ]};
 
 export const field_134 = {len: 35, pos_start: 1104, pos_end: 1139,
-    idx: 134, name: "Last Name", path: ["Last_Name"], fafsa_category: "25c", non_content: true, 
+    idx: 134, name: "Last Name", path: ["Last_Name"], fafsa_category: ["25c"], non_content: true, 
     note: [
         "First character must contain a letter and second character must be non-numeric",
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
@@ -2552,7 +2553,7 @@ export const field_134 = {len: 35, pos_start: 1104, pos_end: 1139,
     ]};
 
 export const field_135 = {len: 10, pos_start: 1139, pos_end: 1149,
-    idx: 135, name: "Suffix", path: ["Suffix"], fafsa_category: "25d", non_content: true, 
+    idx: 135, name: "Suffix", path: ["Suffix"], fafsa_category: ["25d"], non_content: true, 
     note: [
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
         ". (period)",
@@ -2563,7 +2564,7 @@ export const field_135 = {len: 10, pos_start: 1139, pos_end: 1149,
     ]};
 
 export const field_136 = {len: 8, pos_start: 1149, pos_end: 1157,
-    idx: 136, name: "Date of Birth", path: ["Date_of_Birth"], fafsa_category: "25e", 
+    idx: 136, name: "Date of Birth", path: ["Date_of_Birth"], fafsa_category: ["25e"], 
     validate: _validate_date,
     "options":[{"op":"range","min":"19000101","max":"20251231"}],
     note: [
@@ -2587,7 +2588,7 @@ export const field_136 = {len: 8, pos_start: 1149, pos_end: 1157,
     ]};
 
 export const field_137 = {len: 9, pos_start: 1157, pos_end: 1166,
-    idx: 137, name: "Social Security Number", path: ["Social_Security_Number"], fafsa_category: "25f", 
+    idx: 137, name: "Social Security Number", path: ["Social_Security_Number"], fafsa_category: ["25f"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"000000000","max":"999999999"},
@@ -2598,7 +2599,7 @@ export const field_137 = {len: 9, pos_start: 1157, pos_end: 1166,
     ]};
 
 export const field_138 = {len: 9, pos_start: 1166, pos_end: 1175,
-    idx: 138, name: "ITIN", path: ["ITIN"], fafsa_category: "25g", 
+    idx: 138, name: "ITIN", path: ["ITIN"], fafsa_category: ["25g"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"900000000","max":"999999999"},
@@ -2609,7 +2610,7 @@ export const field_138 = {len: 9, pos_start: 1166, pos_end: 1175,
     ]};
 
 export const field_139 = {len: 10, pos_start: 1175, pos_end: 1185,
-    idx: 139, name: "Phone Number", path: ["Phone_Number"], fafsa_category: "Student Spouse Contact Information\n26a", 
+    idx: 139, name: "Phone Number", path: ["Phone_Number"], fafsa_category: ["26a","Student Spouse Contact Information"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0000000000","max":"9999999999"},
@@ -2620,7 +2621,7 @@ export const field_139 = {len: 10, pos_start: 1175, pos_end: 1185,
     ]};
 
 export const field_140 = {len: 50, pos_start: 1185, pos_end: 1235,
-    idx: 140, name: "Email Address", path: ["Email_Address"], fafsa_category: "26b", 
+    idx: 140, name: "Email Address", path: ["Email_Address"], fafsa_category: ["26b"], 
     validate: _validate_options,
     options: [
       {op: "email", },
@@ -2639,7 +2640,7 @@ export const field_140 = {len: 50, pos_start: 1185, pos_end: 1235,
     ]};
 
 export const field_141 = {len: 40, pos_start: 1235, pos_end: 1275,
-    idx: 141, name: "Street Address", path: ["Street_Address"], fafsa_category: "26c", non_content: true, 
+    idx: 141, name: "Street Address", path: ["Street_Address"], fafsa_category: ["26c"], non_content: true, 
     note: [
         "If non-blank, first character must be non-blank.",
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
@@ -2656,7 +2657,7 @@ export const field_141 = {len: 40, pos_start: 1235, pos_end: 1275,
     ]};
 
 export const field_142 = {len: 30, pos_start: 1275, pos_end: 1305,
-    idx: 142, name: "City", path: ["City"], fafsa_category: "26d", non_content: true, 
+    idx: 142, name: "City", path: ["City"], fafsa_category: ["26d"], non_content: true, 
     note: [
         "If non-blank, first character must be non-blank.",
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
@@ -2670,7 +2671,7 @@ export const field_142 = {len: 30, pos_start: 1275, pos_end: 1305,
     ]};
 
 export const field_143 = {len: 2, pos_start: 1305, pos_end: 1307,
-    idx: 143, name: "State", path: ["State"], fafsa_category: "26e", 
+    idx: 143, name: "State", path: ["State"], fafsa_category: ["26e"], 
     validate: _validate_state_codes,
     note: [
         "Valid two letter code (See State Codes)",
@@ -2678,7 +2679,7 @@ export const field_143 = {len: 2, pos_start: 1305, pos_end: 1307,
     ]};
 
 export const field_144 = {len: 10, pos_start: 1307, pos_end: 1317,
-    idx: 144, name: "Zip Code", path: ["Zip_Code"], fafsa_category: "26f", 
+    idx: 144, name: "Zip Code", path: ["Zip_Code"], fafsa_category: ["26f"], 
     validate: _validate_options,
     options: [
       {op: "alphanumeric", },
@@ -2691,7 +2692,7 @@ export const field_144 = {len: 10, pos_start: 1307, pos_end: 1317,
     ]};
 
 export const field_145 = {len: 2, pos_start: 1317, pos_end: 1319,
-    idx: 145, name: "Country", path: ["Country"], fafsa_category: "26g", 
+    idx: 145, name: "Country", path: ["Country"], fafsa_category: ["26g"], 
     validate: _validate_country_codes,
     note: [
         "Valid two letter code (See Country Codes)",
@@ -2711,7 +2712,7 @@ export const section_student_spouse_identity = /* #__PURE__ */ {
 //
 
 export const field_146 = {len: 1, pos_start: 1319, pos_end: 1320,
-    idx: 146, name: "Filed 1040 or 1040NR", path: ["Filed_1040_or_1040NR"], fafsa_category: "Student Spouse Tax Filing Status\n27a", 
+    idx: 146, name: "Filed 1040 or 1040NR", path: ["Filed_1040_or_1040NR"], fafsa_category: ["27a","Student Spouse Tax Filing Status"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -2726,7 +2727,7 @@ export const field_146 = {len: 1, pos_start: 1319, pos_end: 1320,
     ]};
 
 export const field_147 = {len: 1, pos_start: 1320, pos_end: 1321,
-    idx: 147, name: "Filed non-U.S. tax return", path: ["Filed_non_US_tax_return"], fafsa_category: "27b", 
+    idx: 147, name: "Filed non-U.S. tax return", path: ["Filed_non_US_tax_return"], fafsa_category: ["27b"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -2741,7 +2742,7 @@ export const field_147 = {len: 1, pos_start: 1320, pos_end: 1321,
     ]};
 
 export const field_148 = {len: 1, pos_start: 1321, pos_end: 1322,
-    idx: 148, name: "Tax Return Filing Status", path: ["Tax_Return_Filing_Status"], fafsa_category: "Student Spouse 20xx Tax Return Information\n28a", 
+    idx: 148, name: "Tax Return Filing Status", path: ["Tax_Return_Filing_Status"], fafsa_category: ["28a","Student Spouse 20xx Tax Return Information"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -2749,7 +2750,7 @@ export const field_148 = {len: 1, pos_start: 1321, pos_end: 1322,
         "2": "Married-Filed Joint Return",
         "3": "Married-Filed Separate Return",
         "4": "Head of Household",
-        "5": "Qualifying Surviving Spouse",
+        "5": "Qualifying surviving spouse",
       }},
     ],
     note: [
@@ -2757,12 +2758,12 @@ export const field_148 = {len: 1, pos_start: 1321, pos_end: 1322,
         "2 = Married-Filed Joint Return",
         "3 = Married-Filed Separate Return",
         "4 = Head of Household",
-        "5 = Qualifying Surviving Spouse",
+        "5 = Qualifying surviving spouse",
         "Blank"
     ]};
 
 export const field_149 = {len: 11, pos_start: 1322, pos_end: 1333,
-    idx: 149, name: "Income Earned from Work", path: ["Income_Earned_from_Work"], fafsa_category: "28b", 
+    idx: 149, name: "Income Earned from Work", path: ["Income_Earned_from_Work"], fafsa_category: ["28b"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -2773,7 +2774,7 @@ export const field_149 = {len: 11, pos_start: 1322, pos_end: 1333,
     ]};
 
 export const field_150 = {len: 11, pos_start: 1333, pos_end: 1344,
-    idx: 150, name: "Tax Exempt Interest Income", path: ["Tax_Exempt_Interest_Income"], fafsa_category: "28c", 
+    idx: 150, name: "Tax Exempt Interest Income", path: ["Tax_Exempt_Interest_Income"], fafsa_category: ["28c"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -2784,7 +2785,7 @@ export const field_150 = {len: 11, pos_start: 1333, pos_end: 1344,
     ]};
 
 export const field_151 = {len: 11, pos_start: 1344, pos_end: 1355,
-    idx: 151, name: "Untaxed Portions of IRA Distributions", path: ["Untaxed_Portions_of_IRA_Distributions"], fafsa_category: "28d", 
+    idx: 151, name: "Untaxed Portions of IRA Distributions", path: ["Untaxed_Portions_of_IRA_Distributions"], fafsa_category: ["28d"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -2795,7 +2796,7 @@ export const field_151 = {len: 11, pos_start: 1344, pos_end: 1355,
     ]};
 
 export const field_152 = {len: 11, pos_start: 1355, pos_end: 1366,
-    idx: 152, name: "IRA Rollover", path: ["IRA_Rollover"], fafsa_category: "28e", 
+    idx: 152, name: "IRA Rollover", path: ["IRA_Rollover"], fafsa_category: ["28e"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -2806,7 +2807,7 @@ export const field_152 = {len: 11, pos_start: 1355, pos_end: 1366,
     ]};
 
 export const field_153 = {len: 11, pos_start: 1366, pos_end: 1377,
-    idx: 153, name: "Untaxed Portions of Pensions", path: ["Untaxed_Portions_of_Pensions"], fafsa_category: "28f", 
+    idx: 153, name: "Untaxed Portions of Pensions", path: ["Untaxed_Portions_of_Pensions"], fafsa_category: ["28f"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -2817,7 +2818,7 @@ export const field_153 = {len: 11, pos_start: 1366, pos_end: 1377,
     ]};
 
 export const field_154 = {len: 11, pos_start: 1377, pos_end: 1388,
-    idx: 154, name: "Pension Rollover", path: ["Pension_Rollover"], fafsa_category: "28g", 
+    idx: 154, name: "Pension Rollover", path: ["Pension_Rollover"], fafsa_category: ["28g"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -2828,7 +2829,7 @@ export const field_154 = {len: 11, pos_start: 1377, pos_end: 1388,
     ]};
 
 export const field_155 = {len: 10, pos_start: 1388, pos_end: 1398,
-    idx: 155, name: "Adjusted Gross Income", path: ["Adjusted_Gross_Income"], fafsa_category: "28h", 
+    idx: 155, name: "Adjusted Gross Income", path: ["Adjusted_Gross_Income"], fafsa_category: ["28h"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"-999999999","max":"999999999"},
@@ -2839,7 +2840,7 @@ export const field_155 = {len: 10, pos_start: 1388, pos_end: 1398,
     ]};
 
 export const field_156 = {len: 9, pos_start: 1398, pos_end: 1407,
-    idx: 156, name: "Income Tax Paid", path: ["Income_Tax_Paid"], fafsa_category: "28i", 
+    idx: 156, name: "Income Tax Paid", path: ["Income_Tax_Paid"], fafsa_category: ["28i"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"999999999"},
@@ -2850,7 +2851,7 @@ export const field_156 = {len: 9, pos_start: 1398, pos_end: 1407,
     ]};
 
 export const field_157 = {len: 11, pos_start: 1407, pos_end: 1418,
-    idx: 157, name: "Deductible Payments to IRA, Keogh, Other", path: ["Deductible_Payments_to_IRA_Keogh_Other"], fafsa_category: "28j", 
+    idx: 157, name: "Deductible Payments to IRA, Keogh, Other", path: ["Deductible_Payments_to_IRA_Keogh_Other"], fafsa_category: ["28j"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -2861,7 +2862,7 @@ export const field_157 = {len: 11, pos_start: 1407, pos_end: 1418,
     ]};
 
 export const field_158 = {len: 9, pos_start: 1418, pos_end: 1427,
-    idx: 158, name: "Education Credits", path: ["Education_Credits"], fafsa_category: "28k", 
+    idx: 158, name: "Education Credits", path: ["Education_Credits"], fafsa_category: ["28k"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"999999999"},
@@ -2872,7 +2873,7 @@ export const field_158 = {len: 9, pos_start: 1418, pos_end: 1427,
     ]};
 
 export const field_159 = {len: 1, pos_start: 1427, pos_end: 1428,
-    idx: 159, name: "Filed Schedule A, B, D, E, F or H?", path: ["Filed_Schedule_A_B_D_E_F_or_H"], fafsa_category: "28l", 
+    idx: 159, name: "Filed Schedule A, B, D, E, F or H?", path: ["Filed_Schedule_A_B_D_E_F_or_H"], fafsa_category: ["28l"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -2889,7 +2890,7 @@ export const field_159 = {len: 1, pos_start: 1427, pos_end: 1428,
     ]};
 
 export const field_160 = {len: 12, pos_start: 1428, pos_end: 1440,
-    idx: 160, name: "Schedule C Amount", path: ["Schedule_C_Amount"], fafsa_category: "28m", 
+    idx: 160, name: "Schedule C Amount", path: ["Schedule_C_Amount"], fafsa_category: ["28m"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"-99999999999","max":"99999999999"},
@@ -2900,7 +2901,7 @@ export const field_160 = {len: 12, pos_start: 1428, pos_end: 1440,
     ]};
 
 export const field_161 = {len: 10, pos_start: 1440, pos_end: 1450,
-    idx: 161, name: "Foreign Income Exempt from Federal Taxation", path: ["Foreign_Income_Exempt_from_Federal_Taxation"], fafsa_category: "28n", 
+    idx: 161, name: "Foreign Earned Income Exclusion", path: ["Foreign_Earned_Income_Exclusion"], fafsa_category: ["28n"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"-999999999","max":"999999999"},
@@ -2911,7 +2912,7 @@ export const field_161 = {len: 10, pos_start: 1440, pos_end: 1450,
     ]};
 
 export const field_162 = {len: 1, pos_start: 1450, pos_end: 1451,
-    idx: 162, name: "Consent to Retrieve and Disclose FTI", path: ["Consent_to_Retrieve_and_Disclose_FTI"], fafsa_category: "29a", 
+    idx: 162, name: "Consent to Retrieve and Disclose FTI", path: ["Consent_to_Retrieve_and_Disclose_FTI"], fafsa_category: ["29a","Student Spouse Consent, Approval, and Signature"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -2934,11 +2935,11 @@ export const section_student_spouse_financial_manual = /* #__PURE__ */ {
 
 
 //*********************************************
-// Section: Student Spouse Consent and Signature
+// Section: Student Spouse Consent, Approval, and Signature
 //
 
 export const field_163 = {len: 1, pos_start: 1451, pos_end: 1452,
-    idx: 163, name: "Signature", path: ["Signature"], fafsa_category: "29b", 
+    idx: 163, name: "Signature", path: ["Signature"], fafsa_category: ["29b"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -2951,12 +2952,12 @@ export const field_163 = {len: 1, pos_start: 1451, pos_end: 1452,
     ]};
 
 export const field_164 = {len: 8, pos_start: 1452, pos_end: 1460,
-    idx: 164, name: "Signature Date", path: ["Signature_Date"], fafsa_category: "29c", 
+    idx: 164, name: "Signature Date", path: ["Signature_Date"], fafsa_category: ["29c"], 
     validate: _validate_date,
-    "allow_blank":true,"options":[{"op":"range","min":"20231231","max":"20250930"}],
+    "allow_blank":true,"options":[{"op":"range","min":"20231227","max":"20250930"}],
     note: [
         "Format is CCYYMMDD",
-        "20231231 to 20250930",
+        "20231227 to 20250930",
         "Blank"
     ]};
 
@@ -2970,7 +2971,7 @@ export const field_165 = {len: 50, pos_start: 1460, pos_end: 1510,
 
 
 export const section_student_spouse_consent = /* #__PURE__ */ {
-    section: "Student Spouse Consent and Signature",
+    section: "Student Spouse Consent, Approval, and Signature",
     path: ["student_spouse","consent"],
     field_list: [field_163, field_164, field_165],
 }
@@ -2981,7 +2982,7 @@ export const section_student_spouse_consent = /* #__PURE__ */ {
 //
 
 export const field_166 = {len: 35, pos_start: 1510, pos_end: 1545,
-    idx: 166, name: "First Name", path: ["First_Name"], fafsa_category: "Parent Identity Information\n30a", non_content: true, 
+    idx: 166, name: "First Name", path: ["First_Name"], fafsa_category: ["30a","Parent Identity Information"], non_content: true, 
     note: [
         "First character must contain a letter and second character must be non-numeric",
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
@@ -2993,7 +2994,7 @@ export const field_166 = {len: 35, pos_start: 1510, pos_end: 1545,
     ]};
 
 export const field_167 = {len: 15, pos_start: 1545, pos_end: 1560,
-    idx: 167, name: "Middle Name", path: ["Middle_Name"], fafsa_category: "30b", non_content: true, 
+    idx: 167, name: "Middle Name", path: ["Middle_Name"], fafsa_category: ["30b"], non_content: true, 
     note: [
         "First character must contain a letter",
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
@@ -3005,7 +3006,7 @@ export const field_167 = {len: 15, pos_start: 1545, pos_end: 1560,
     ]};
 
 export const field_168 = {len: 35, pos_start: 1560, pos_end: 1595,
-    idx: 168, name: "Last Name", path: ["Last_Name"], fafsa_category: "30c", non_content: true, 
+    idx: 168, name: "Last Name", path: ["Last_Name"], fafsa_category: ["30c"], non_content: true, 
     note: [
         "First character must contain a letter and second character must be non-numeric",
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
@@ -3017,7 +3018,7 @@ export const field_168 = {len: 35, pos_start: 1560, pos_end: 1595,
     ]};
 
 export const field_169 = {len: 10, pos_start: 1595, pos_end: 1605,
-    idx: 169, name: "Suffix", path: ["Suffix"], fafsa_category: "30d", non_content: true, 
+    idx: 169, name: "Suffix", path: ["Suffix"], fafsa_category: ["30d"], non_content: true, 
     note: [
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
         ". (period)",
@@ -3028,7 +3029,7 @@ export const field_169 = {len: 10, pos_start: 1595, pos_end: 1605,
     ]};
 
 export const field_170 = {len: 8, pos_start: 1605, pos_end: 1613,
-    idx: 170, name: "Date of Birth", path: ["Date_of_Birth"], fafsa_category: "30e", 
+    idx: 170, name: "Date of Birth", path: ["Date_of_Birth"], fafsa_category: ["30e"], 
     validate: _validate_date,
     "options":[{"op":"range","min":"19000101","max":"20251231"}],
     note: [
@@ -3052,7 +3053,7 @@ export const field_170 = {len: 8, pos_start: 1605, pos_end: 1613,
     ]};
 
 export const field_171 = {len: 9, pos_start: 1613, pos_end: 1622,
-    idx: 171, name: "Social Security Number", path: ["Social_Security_Number"], fafsa_category: "30f", 
+    idx: 171, name: "Social Security Number", path: ["Social_Security_Number"], fafsa_category: ["30f"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"000000000","max":"999999999"},
@@ -3063,7 +3064,7 @@ export const field_171 = {len: 9, pos_start: 1613, pos_end: 1622,
     ]};
 
 export const field_172 = {len: 9, pos_start: 1622, pos_end: 1631,
-    idx: 172, name: "ITIN", path: ["ITIN"], fafsa_category: "30g", 
+    idx: 172, name: "ITIN", path: ["ITIN"], fafsa_category: ["30g"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"900000000","max":"999999999"},
@@ -3074,7 +3075,7 @@ export const field_172 = {len: 9, pos_start: 1622, pos_end: 1631,
     ]};
 
 export const field_173 = {len: 10, pos_start: 1631, pos_end: 1641,
-    idx: 173, name: "Phone Number", path: ["Phone_Number"], fafsa_category: "Parent Information\n31a", 
+    idx: 173, name: "Phone Number", path: ["Phone_Number"], fafsa_category: ["31a","Parent Information"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0000000000","max":"9999999999"},
@@ -3085,7 +3086,7 @@ export const field_173 = {len: 10, pos_start: 1631, pos_end: 1641,
     ]};
 
 export const field_174 = {len: 50, pos_start: 1641, pos_end: 1691,
-    idx: 174, name: "Email Address", path: ["Email_Address"], fafsa_category: "31b", 
+    idx: 174, name: "Email Address", path: ["Email_Address"], fafsa_category: ["31b"], 
     validate: _validate_options,
     options: [
       {op: "email", },
@@ -3104,7 +3105,7 @@ export const field_174 = {len: 50, pos_start: 1641, pos_end: 1691,
     ]};
 
 export const field_175 = {len: 40, pos_start: 1691, pos_end: 1731,
-    idx: 175, name: "Street Address", path: ["Street_Address"], fafsa_category: "31c", non_content: true, 
+    idx: 175, name: "Street Address", path: ["Street_Address"], fafsa_category: ["31c"], non_content: true, 
     note: [
         "If non-blank, first character must be non-blank.",
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
@@ -3121,7 +3122,7 @@ export const field_175 = {len: 40, pos_start: 1691, pos_end: 1731,
     ]};
 
 export const field_176 = {len: 30, pos_start: 1731, pos_end: 1761,
-    idx: 176, name: "City", path: ["City"], fafsa_category: "31d", non_content: true, 
+    idx: 176, name: "City", path: ["City"], fafsa_category: ["31d"], non_content: true, 
     note: [
         "If non-blank, first character must be non-blank.",
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
@@ -3135,7 +3136,7 @@ export const field_176 = {len: 30, pos_start: 1731, pos_end: 1761,
     ]};
 
 export const field_177 = {len: 2, pos_start: 1761, pos_end: 1763,
-    idx: 177, name: "State", path: ["State"], fafsa_category: "31e", 
+    idx: 177, name: "State", path: ["State"], fafsa_category: ["31e"], 
     validate: _validate_state_codes,
     note: [
         "Valid two letter code (See State Codes)",
@@ -3143,7 +3144,7 @@ export const field_177 = {len: 2, pos_start: 1761, pos_end: 1763,
     ]};
 
 export const field_178 = {len: 10, pos_start: 1763, pos_end: 1773,
-    idx: 178, name: "Zip Code", path: ["Zip_Code"], fafsa_category: "31f", 
+    idx: 178, name: "Zip Code", path: ["Zip_Code"], fafsa_category: ["31f"], 
     validate: _validate_options,
     options: [
       {op: "alphanumeric", },
@@ -3156,7 +3157,7 @@ export const field_178 = {len: 10, pos_start: 1763, pos_end: 1773,
     ]};
 
 export const field_179 = {len: 2, pos_start: 1773, pos_end: 1775,
-    idx: 179, name: "Country", path: ["Country"], fafsa_category: "31g", 
+    idx: 179, name: "Country", path: ["Country"], fafsa_category: ["31g"], 
     validate: _validate_country_codes,
     note: [
         "Valid two letter code (See Country Codes)",
@@ -3176,7 +3177,7 @@ export const section_parent_identity = /* #__PURE__ */ {
 //
 
 export const field_180 = {len: 1, pos_start: 1775, pos_end: 1776,
-    idx: 180, name: "Marital Status", path: ["Marital_Status"], fafsa_category: "Parent Current Marital Status\n32", 
+    idx: 180, name: "Marital Status", path: ["Marital_Status"], fafsa_category: ["32","Parent Current Marital Status"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -3201,7 +3202,7 @@ export const field_180 = {len: 1, pos_start: 1775, pos_end: 1776,
     ]};
 
 export const field_181 = {len: 2, pos_start: 1776, pos_end: 1778,
-    idx: 181, name: "State of Legal Residence", path: ["State_of_Legal_Residence"], fafsa_category: "Parent State of Legal Residence\n33a", 
+    idx: 181, name: "State of Legal Residence", path: ["State_of_Legal_Residence"], fafsa_category: ["33a","Parent State of Legal Residence"], 
     validate: _validate_state_codes,
     note: [
         "Valid two letter code (See State Codes)",
@@ -3209,7 +3210,7 @@ export const field_181 = {len: 2, pos_start: 1776, pos_end: 1778,
     ]};
 
 export const field_182 = {len: 6, pos_start: 1778, pos_end: 1784,
-    idx: 182, name: "Legal Residence Date", path: ["Legal_Residence_Date"], fafsa_category: "33b", 
+    idx: 182, name: "Legal Residence Date", path: ["Legal_Residence_Date"], fafsa_category: ["33b"], 
     validate: _validate_yearmonth,
     "allow_blank":true,"options":[{"op":"range","min":"190001","max":"20251231"}],
     note: [
@@ -3219,7 +3220,7 @@ export const field_182 = {len: 6, pos_start: 1778, pos_end: 1784,
     ]};
 
 export const field_183 = {len: 2, pos_start: 1784, pos_end: 1786,
-    idx: 183, name: "Updated Family Size", path: ["Updated_Family_Size"], fafsa_category: "Family Size\n34", 
+    idx: 183, name: "Updated Family Size", path: ["Updated_Family_Size"], fafsa_category: ["34","Family Size"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99"},
@@ -3230,7 +3231,7 @@ export const field_183 = {len: 2, pos_start: 1784, pos_end: 1786,
     ]};
 
 export const field_184 = {len: 2, pos_start: 1786, pos_end: 1788,
-    idx: 184, name: "Number in College", path: ["Number_in_College"], fafsa_category: "Number in College\n35", 
+    idx: 184, name: "Number in College", path: ["Number_in_College"], fafsa_category: ["35","Number in College"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99"},
@@ -3253,7 +3254,7 @@ export const section_parent_non_financial = /* #__PURE__ */ {
 //
 
 export const field_185 = {len: 1, pos_start: 1788, pos_end: 1789,
-    idx: 185, name: "Received EITC", path: ["Received_EITC"], fafsa_category: "Federal Benefits Received\n36a", 
+    idx: 185, name: "Received EITC", path: ["Received_EITC"], fafsa_category: ["36a","Federal Benefits Received"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -3266,7 +3267,7 @@ export const field_185 = {len: 1, pos_start: 1788, pos_end: 1789,
     ]};
 
 export const field_186 = {len: 1, pos_start: 1789, pos_end: 1790,
-    idx: 186, name: "Received Federal Housing Assistance", path: ["Received_Federal_Housing_Assistance"], fafsa_category: "36b", 
+    idx: 186, name: "Received Federal Housing Assistance", path: ["Received_Federal_Housing_Assistance"], fafsa_category: ["36b"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -3279,7 +3280,7 @@ export const field_186 = {len: 1, pos_start: 1789, pos_end: 1790,
     ]};
 
 export const field_187 = {len: 1, pos_start: 1790, pos_end: 1791,
-    idx: 187, name: "Received Free/Reduced Price Lunch", path: ["Received_FreeReduced_Price_Lunch"], fafsa_category: "36c", 
+    idx: 187, name: "Received Free/Reduced Price Lunch", path: ["Received_FreeReduced_Price_Lunch"], fafsa_category: ["36c"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -3292,7 +3293,7 @@ export const field_187 = {len: 1, pos_start: 1790, pos_end: 1791,
     ]};
 
 export const field_188 = {len: 1, pos_start: 1791, pos_end: 1792,
-    idx: 188, name: "Received Medicaid", path: ["Received_Medicaid"], fafsa_category: "36d", 
+    idx: 188, name: "Received Medicaid", path: ["Received_Medicaid"], fafsa_category: ["36d"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -3305,7 +3306,7 @@ export const field_188 = {len: 1, pos_start: 1791, pos_end: 1792,
     ]};
 
 export const field_189 = {len: 1, pos_start: 1792, pos_end: 1793,
-    idx: 189, name: "Received Refundable Credit for 36B Health Plan", path: ["Received_Refundable_Credit_for_36B_Health_Plan"], fafsa_category: "36e", 
+    idx: 189, name: "Received Refundable Credit for 36B Health Plan", path: ["Received_Refundable_Credit_for_36B_Health_Plan"], fafsa_category: ["36e"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -3318,7 +3319,7 @@ export const field_189 = {len: 1, pos_start: 1792, pos_end: 1793,
     ]};
 
 export const field_190 = {len: 1, pos_start: 1793, pos_end: 1794,
-    idx: 190, name: "Received SNAP", path: ["Received_SNAP"], fafsa_category: "36f", 
+    idx: 190, name: "Received SNAP", path: ["Received_SNAP"], fafsa_category: ["36f"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -3331,7 +3332,7 @@ export const field_190 = {len: 1, pos_start: 1793, pos_end: 1794,
     ]};
 
 export const field_191 = {len: 1, pos_start: 1794, pos_end: 1795,
-    idx: 191, name: "Received Supplemental Security Income", path: ["Received_Supplemental_Security_Income"], fafsa_category: "36g", 
+    idx: 191, name: "Received Supplemental Security Income", path: ["Received_Supplemental_Security_Income"], fafsa_category: ["36g"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -3344,7 +3345,7 @@ export const field_191 = {len: 1, pos_start: 1794, pos_end: 1795,
     ]};
 
 export const field_192 = {len: 1, pos_start: 1795, pos_end: 1796,
-    idx: 192, name: "Received TANF", path: ["Received_TANF"], fafsa_category: "36h", 
+    idx: 192, name: "Received TANF", path: ["Received_TANF"], fafsa_category: ["36h"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -3357,7 +3358,7 @@ export const field_192 = {len: 1, pos_start: 1795, pos_end: 1796,
     ]};
 
 export const field_193 = {len: 1, pos_start: 1796, pos_end: 1797,
-    idx: 193, name: "Received WIC", path: ["Received_WIC"], fafsa_category: "36i", 
+    idx: 193, name: "Received WIC", path: ["Received_WIC"], fafsa_category: ["36i"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -3370,7 +3371,7 @@ export const field_193 = {len: 1, pos_start: 1796, pos_end: 1797,
     ]};
 
 export const field_194 = {len: 1, pos_start: 1797, pos_end: 1798,
-    idx: 194, name: "Federal Benefits: None of the Above", path: ["Federal_Benefits_None_of_the_Above"], fafsa_category: "36j", 
+    idx: 194, name: "Federal Benefits: None of the Above", path: ["Federal_Benefits_None_of_the_Above"], fafsa_category: ["36j"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -3383,7 +3384,7 @@ export const field_194 = {len: 1, pos_start: 1797, pos_end: 1798,
     ]};
 
 export const field_195 = {len: 1, pos_start: 1798, pos_end: 1799,
-    idx: 195, name: "Filed 1040 or 1040NR", path: ["Filed_1040_or_1040NR"], fafsa_category: "37a", 
+    idx: 195, name: "Filed 1040 or 1040NR", path: ["Filed_1040_or_1040NR"], fafsa_category: ["37a"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -3398,7 +3399,7 @@ export const field_195 = {len: 1, pos_start: 1798, pos_end: 1799,
     ]};
 
 export const field_196 = {len: 1, pos_start: 1799, pos_end: 1800,
-    idx: 196, name: "Filed non-U.S. tax return", path: ["Filed_non_US_tax_return"], fafsa_category: "37b", 
+    idx: 196, name: "Filed non-U.S. tax return", path: ["Filed_non_US_tax_return"], fafsa_category: ["37b"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -3421,7 +3422,7 @@ export const field_196 = {len: 1, pos_start: 1799, pos_end: 1800,
     ]};
 
 export const field_197 = {len: 1, pos_start: 1800, pos_end: 1801,
-    idx: 197, name: "Filed Joint Return With Current Spouse", path: ["Filed_Joint_Return_With_Current_Spouse"], fafsa_category: "37c", 
+    idx: 197, name: "Filed Joint Return With Current Spouse", path: ["Filed_Joint_Return_With_Current_Spouse"], fafsa_category: ["37c"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -3436,7 +3437,7 @@ export const field_197 = {len: 1, pos_start: 1800, pos_end: 1801,
     ]};
 
 export const field_198 = {len: 1, pos_start: 1801, pos_end: 1802,
-    idx: 198, name: "Tax Return Filing Status", path: ["Tax_Return_Filing_Status"], fafsa_category: "38a", 
+    idx: 198, name: "Tax Return Filing Status", path: ["Tax_Return_Filing_Status"], fafsa_category: ["38a"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -3444,7 +3445,7 @@ export const field_198 = {len: 1, pos_start: 1801, pos_end: 1802,
         "2": "Married-Filed Joint Return",
         "3": "Married-Filed Separate Return",
         "4": "Head of Household",
-        "5": "Qualifying Surviving Spouse",
+        "5": "Qualifying surviving spouse",
       }},
     ],
     note: [
@@ -3452,12 +3453,12 @@ export const field_198 = {len: 1, pos_start: 1801, pos_end: 1802,
         "2 = Married-Filed Joint Return",
         "3 = Married-Filed Separate Return",
         "4 = Head of Household",
-        "5 = Qualifying Surviving Spouse",
+        "5 = Qualifying surviving spouse",
         "Blank"
     ]};
 
 export const field_199 = {len: 11, pos_start: 1802, pos_end: 1813,
-    idx: 199, name: "Income Earned from Work", path: ["Income_Earned_from_Work"], fafsa_category: "38b", 
+    idx: 199, name: "Income Earned from Work", path: ["Income_Earned_from_Work"], fafsa_category: ["38b"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -3468,7 +3469,7 @@ export const field_199 = {len: 11, pos_start: 1802, pos_end: 1813,
     ]};
 
 export const field_200 = {len: 11, pos_start: 1813, pos_end: 1824,
-    idx: 200, name: "Tax Exempt Interest Income", path: ["Tax_Exempt_Interest_Income"], fafsa_category: "38c", 
+    idx: 200, name: "Tax Exempt Interest Income", path: ["Tax_Exempt_Interest_Income"], fafsa_category: ["38c"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -3479,7 +3480,7 @@ export const field_200 = {len: 11, pos_start: 1813, pos_end: 1824,
     ]};
 
 export const field_201 = {len: 11, pos_start: 1824, pos_end: 1835,
-    idx: 201, name: "Untaxed Portions of IRA Distributions", path: ["Untaxed_Portions_of_IRA_Distributions"], fafsa_category: "38d", 
+    idx: 201, name: "Untaxed Portions of IRA Distributions", path: ["Untaxed_Portions_of_IRA_Distributions"], fafsa_category: ["38d"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -3490,7 +3491,7 @@ export const field_201 = {len: 11, pos_start: 1824, pos_end: 1835,
     ]};
 
 export const field_202 = {len: 11, pos_start: 1835, pos_end: 1846,
-    idx: 202, name: "IRA Rollover", path: ["IRA_Rollover"], fafsa_category: "38e", 
+    idx: 202, name: "IRA Rollover", path: ["IRA_Rollover"], fafsa_category: ["38e"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -3501,7 +3502,7 @@ export const field_202 = {len: 11, pos_start: 1835, pos_end: 1846,
     ]};
 
 export const field_203 = {len: 11, pos_start: 1846, pos_end: 1857,
-    idx: 203, name: "Untaxed Portions of Pensions", path: ["Untaxed_Portions_of_Pensions"], fafsa_category: "38f", 
+    idx: 203, name: "Untaxed Portions of Pensions", path: ["Untaxed_Portions_of_Pensions"], fafsa_category: ["38f"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -3512,7 +3513,7 @@ export const field_203 = {len: 11, pos_start: 1846, pos_end: 1857,
     ]};
 
 export const field_204 = {len: 11, pos_start: 1857, pos_end: 1868,
-    idx: 204, name: "Pension Rollover", path: ["Pension_Rollover"], fafsa_category: "38g", 
+    idx: 204, name: "Pension Rollover", path: ["Pension_Rollover"], fafsa_category: ["38g"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -3523,7 +3524,7 @@ export const field_204 = {len: 11, pos_start: 1857, pos_end: 1868,
     ]};
 
 export const field_205 = {len: 10, pos_start: 1868, pos_end: 1878,
-    idx: 205, name: "Adjusted Gross Income", path: ["Adjusted_Gross_Income"], fafsa_category: "38h", 
+    idx: 205, name: "Adjusted Gross Income", path: ["Adjusted_Gross_Income"], fafsa_category: ["38h"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"-999999999","max":"999999999"},
@@ -3534,7 +3535,7 @@ export const field_205 = {len: 10, pos_start: 1868, pos_end: 1878,
     ]};
 
 export const field_206 = {len: 9, pos_start: 1878, pos_end: 1887,
-    idx: 206, name: "Income Tax Paid", path: ["Income_Tax_Paid"], fafsa_category: "38i", 
+    idx: 206, name: "Income Tax Paid", path: ["Income_Tax_Paid"], fafsa_category: ["38i"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"999999999"},
@@ -3545,7 +3546,7 @@ export const field_206 = {len: 9, pos_start: 1878, pos_end: 1887,
     ]};
 
 export const field_207 = {len: 1, pos_start: 1887, pos_end: 1888,
-    idx: 207, name: "Earned Income Tax Credit Received During Tax Year?", path: ["Earned_Income_Tax_Credit_Received_During_Tax_Year"], fafsa_category: "38j", 
+    idx: 207, name: "Earned Income Tax Credit Received During Tax Year?", path: ["Earned_Income_Tax_Credit_Received_During_Tax_Year"], fafsa_category: ["38j"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -3562,7 +3563,7 @@ export const field_207 = {len: 1, pos_start: 1887, pos_end: 1888,
     ]};
 
 export const field_208 = {len: 11, pos_start: 1888, pos_end: 1899,
-    idx: 208, name: "Deductible Payments to IRA, Keogh, Other", path: ["Deductible_Payments_to_IRA_Keogh_Other"], fafsa_category: "38k", 
+    idx: 208, name: "Deductible Payments to IRA, Keogh, Other", path: ["Deductible_Payments_to_IRA_Keogh_Other"], fafsa_category: ["38k"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -3573,7 +3574,7 @@ export const field_208 = {len: 11, pos_start: 1888, pos_end: 1899,
     ]};
 
 export const field_209 = {len: 9, pos_start: 1899, pos_end: 1908,
-    idx: 209, name: "Education Credits", path: ["Education_Credits"], fafsa_category: "38l", 
+    idx: 209, name: "Education Credits", path: ["Education_Credits"], fafsa_category: ["38l"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"999999999"},
@@ -3584,7 +3585,7 @@ export const field_209 = {len: 9, pos_start: 1899, pos_end: 1908,
     ]};
 
 export const field_210 = {len: 1, pos_start: 1908, pos_end: 1909,
-    idx: 210, name: "Filed Schedule A, B, D, E, F or H?", path: ["Filed_Schedule_A_B_D_E_F_or_H"], fafsa_category: "38m", 
+    idx: 210, name: "Filed Schedule A, B, D, E, F or H?", path: ["Filed_Schedule_A_B_D_E_F_or_H"], fafsa_category: ["38m"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -3601,7 +3602,7 @@ export const field_210 = {len: 1, pos_start: 1908, pos_end: 1909,
     ]};
 
 export const field_211 = {len: 12, pos_start: 1909, pos_end: 1921,
-    idx: 211, name: "Schedule C Amount", path: ["Schedule_C_Amount"], fafsa_category: "38n", 
+    idx: 211, name: "Schedule C Amount", path: ["Schedule_C_Amount"], fafsa_category: ["38n"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"-99999999999","max":"99999999999"},
@@ -3612,7 +3613,7 @@ export const field_211 = {len: 12, pos_start: 1909, pos_end: 1921,
     ]};
 
 export const field_212 = {len: 7, pos_start: 1921, pos_end: 1928,
-    idx: 212, name: "College Grant and Scholarship Aid", path: ["College_Grant_and_Scholarship_Aid"], fafsa_category: "38o", 
+    idx: 212, name: "College Grant and Scholarship Aid", path: ["College_Grant_and_Scholarship_Aid"], fafsa_category: ["38o"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"9999999"},
@@ -3623,7 +3624,7 @@ export const field_212 = {len: 7, pos_start: 1921, pos_end: 1928,
     ]};
 
 export const field_213 = {len: 10, pos_start: 1928, pos_end: 1938,
-    idx: 213, name: "Foreign Earned Income Exclusion", path: ["Foreign_Earned_Income_Exclusion"], fafsa_category: "38p", 
+    idx: 213, name: "Foreign Earned Income Exclusion", path: ["Foreign_Earned_Income_Exclusion"], fafsa_category: ["38p"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"-999999999","max":"999999999"},
@@ -3634,7 +3635,7 @@ export const field_213 = {len: 10, pos_start: 1928, pos_end: 1938,
     ]};
 
 export const field_214 = {len: 7, pos_start: 1938, pos_end: 1945,
-    idx: 214, name: "Child Support Received", path: ["Child_Support_Received"], fafsa_category: "Annual Child Support Received \n39", 
+    idx: 214, name: "Child Support Received", path: ["Child_Support_Received"], fafsa_category: ["39","Annual Child Support Received"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"9999999"},
@@ -3645,7 +3646,7 @@ export const field_214 = {len: 7, pos_start: 1938, pos_end: 1945,
     ]};
 
 export const field_215 = {len: 7, pos_start: 1945, pos_end: 1952,
-    idx: 215, name: "Total of Cash, Savings, and Checking Accounts", path: ["Total_of_Cash_Savings_and_Checking_Accounts"], fafsa_category: "Parent Assets\n40a", 
+    idx: 215, name: "Total of Cash, Savings, and Checking Accounts", path: ["Total_of_Cash_Savings_and_Checking_Accounts"], fafsa_category: ["40a","Parent Assets"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"9999999"},
@@ -3656,7 +3657,7 @@ export const field_215 = {len: 7, pos_start: 1945, pos_end: 1952,
     ]};
 
 export const field_216 = {len: 7, pos_start: 1952, pos_end: 1959,
-    idx: 216, name: "Net Worth of Current Investments", path: ["Net_Worth_of_Current_Investments"], fafsa_category: "40b", 
+    idx: 216, name: "Net Worth of Current Investments", path: ["Net_Worth_of_Current_Investments"], fafsa_category: ["40b"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"9999999"},
@@ -3667,7 +3668,7 @@ export const field_216 = {len: 7, pos_start: 1952, pos_end: 1959,
     ]};
 
 export const field_217 = {len: 7, pos_start: 1959, pos_end: 1966,
-    idx: 217, name: "Net Worth of Businesses and Investment Farms", path: ["Net_Worth_of_Businesses_and_Investment_Farms"], fafsa_category: "40c", 
+    idx: 217, name: "Net Worth of Businesses and Investment Farms", path: ["Net_Worth_of_Businesses_and_Investment_Farms"], fafsa_category: ["40c"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"9999999"},
@@ -3678,7 +3679,7 @@ export const field_217 = {len: 7, pos_start: 1959, pos_end: 1966,
     ]};
 
 export const field_218 = {len: 1, pos_start: 1966, pos_end: 1967,
-    idx: 218, name: "Consent to Retrieve and Disclose FTI", path: ["Consent_to_Retrieve_and_Disclose_FTI"], fafsa_category: "Parent Consent and Signature\n41a", 
+    idx: 218, name: "Consent to Retrieve and Disclose FTI", path: ["Consent_to_Retrieve_and_Disclose_FTI"], fafsa_category: ["41a","Parent Consent, Approval, and Signature"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -3701,11 +3702,11 @@ export const section_parent_financial_manual = /* #__PURE__ */ {
 
 
 //*********************************************
-// Section: Parent Consent and Signature
+// Section: Parent Consent, Approval, and Signature
 //
 
 export const field_219 = {len: 1, pos_start: 1967, pos_end: 1968,
-    idx: 219, name: "Signature", path: ["Signature"], fafsa_category: "41b", 
+    idx: 219, name: "Signature", path: ["Signature"], fafsa_category: ["41b"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -3718,12 +3719,12 @@ export const field_219 = {len: 1, pos_start: 1967, pos_end: 1968,
     ]};
 
 export const field_220 = {len: 8, pos_start: 1968, pos_end: 1976,
-    idx: 220, name: "Signature Date", path: ["Signature_Date"], fafsa_category: "41c", 
+    idx: 220, name: "Signature Date", path: ["Signature_Date"], fafsa_category: ["41c"], 
     validate: _validate_date,
-    "allow_blank":true,"options":[{"op":"range","min":"20231231","max":"20250930"}],
+    "allow_blank":true,"options":[{"op":"range","min":"20231227","max":"20250930"}],
     note: [
         "Format is CCYYMMDD",
-        "20231231 to 20250930",
+        "20231227 to 20250930",
         "Blank"
     ]};
 
@@ -3737,7 +3738,7 @@ export const field_221 = {len: 50, pos_start: 1976, pos_end: 2026,
 
 
 export const section_parent_consent = /* #__PURE__ */ {
-    section: "Parent Consent and Signature",
+    section: "Parent Consent, Approval, and Signature",
     path: ["parent","consent"],
     field_list: [field_219, field_220, field_221],
 }
@@ -3748,7 +3749,7 @@ export const section_parent_consent = /* #__PURE__ */ {
 //
 
 export const field_222 = {len: 35, pos_start: 2026, pos_end: 2061,
-    idx: 222, name: "First Name", path: ["First_Name"], fafsa_category: "Parent Spouse or Partner Identity\n42a", non_content: true, 
+    idx: 222, name: "First Name", path: ["First_Name"], fafsa_category: ["42a","Parent Spouse or Partner Identity"], non_content: true, 
     note: [
         "First character must contain a letter and second character must be non-numeric",
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
@@ -3760,7 +3761,7 @@ export const field_222 = {len: 35, pos_start: 2026, pos_end: 2061,
     ]};
 
 export const field_223 = {len: 15, pos_start: 2061, pos_end: 2076,
-    idx: 223, name: "Middle Name", path: ["Middle_Name"], fafsa_category: "42b", non_content: true, 
+    idx: 223, name: "Middle Name", path: ["Middle_Name"], fafsa_category: ["42b"], non_content: true, 
     note: [
         "First character must contain a letter",
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
@@ -3772,7 +3773,7 @@ export const field_223 = {len: 15, pos_start: 2061, pos_end: 2076,
     ]};
 
 export const field_224 = {len: 35, pos_start: 2076, pos_end: 2111,
-    idx: 224, name: "Last Name", path: ["Last_Name"], fafsa_category: "42c", non_content: true, 
+    idx: 224, name: "Last Name", path: ["Last_Name"], fafsa_category: ["42c"], non_content: true, 
     note: [
         "First character must contain a letter and second character must be non-numeric",
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
@@ -3784,7 +3785,7 @@ export const field_224 = {len: 35, pos_start: 2076, pos_end: 2111,
     ]};
 
 export const field_225 = {len: 10, pos_start: 2111, pos_end: 2121,
-    idx: 225, name: "Suffix", path: ["Suffix"], fafsa_category: "42d", non_content: true, 
+    idx: 225, name: "Suffix", path: ["Suffix"], fafsa_category: ["42d"], non_content: true, 
     note: [
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
         ". (period)",
@@ -3795,7 +3796,7 @@ export const field_225 = {len: 10, pos_start: 2111, pos_end: 2121,
     ]};
 
 export const field_226 = {len: 8, pos_start: 2121, pos_end: 2129,
-    idx: 226, name: "Date of Birth", path: ["Date_of_Birth"], fafsa_category: "42e", 
+    idx: 226, name: "Date of Birth", path: ["Date_of_Birth"], fafsa_category: ["42e"], 
     validate: _validate_date,
     "options":[{"op":"range","min":"19000101","max":"20251231"}],
     note: [
@@ -3819,7 +3820,7 @@ export const field_226 = {len: 8, pos_start: 2121, pos_end: 2129,
     ]};
 
 export const field_227 = {len: 9, pos_start: 2129, pos_end: 2138,
-    idx: 227, name: "Social Security Number", path: ["Social_Security_Number"], fafsa_category: "42f", 
+    idx: 227, name: "Social Security Number", path: ["Social_Security_Number"], fafsa_category: ["42f"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"000000000","max":"999999999"},
@@ -3830,7 +3831,7 @@ export const field_227 = {len: 9, pos_start: 2129, pos_end: 2138,
     ]};
 
 export const field_228 = {len: 9, pos_start: 2138, pos_end: 2147,
-    idx: 228, name: "ITIN", path: ["ITIN"], fafsa_category: "42g", 
+    idx: 228, name: "ITIN", path: ["ITIN"], fafsa_category: ["42g"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"900000000","max":"999999999"},
@@ -3841,7 +3842,7 @@ export const field_228 = {len: 9, pos_start: 2138, pos_end: 2147,
     ]};
 
 export const field_229 = {len: 10, pos_start: 2147, pos_end: 2157,
-    idx: 229, name: "Phone Number", path: ["Phone_Number"], fafsa_category: "43a", 
+    idx: 229, name: "Phone Number", path: ["Phone_Number"], fafsa_category: ["43a"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0000000000","max":"9999999999"},
@@ -3852,7 +3853,7 @@ export const field_229 = {len: 10, pos_start: 2147, pos_end: 2157,
     ]};
 
 export const field_230 = {len: 50, pos_start: 2157, pos_end: 2207,
-    idx: 230, name: "Email Address", path: ["Email_Address"], fafsa_category: "43b", 
+    idx: 230, name: "Email Address", path: ["Email_Address"], fafsa_category: ["43b"], 
     validate: _validate_options,
     options: [
       {op: "email", },
@@ -3871,7 +3872,7 @@ export const field_230 = {len: 50, pos_start: 2157, pos_end: 2207,
     ]};
 
 export const field_231 = {len: 40, pos_start: 2207, pos_end: 2247,
-    idx: 231, name: "Street Address", path: ["Street_Address"], fafsa_category: "43c", non_content: true, 
+    idx: 231, name: "Street Address", path: ["Street_Address"], fafsa_category: ["43c"], non_content: true, 
     note: [
         "If non-blank, first character must be non-blank.",
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
@@ -3888,7 +3889,7 @@ export const field_231 = {len: 40, pos_start: 2207, pos_end: 2247,
     ]};
 
 export const field_232 = {len: 30, pos_start: 2247, pos_end: 2277,
-    idx: 232, name: "City", path: ["City"], fafsa_category: "43d", non_content: true, 
+    idx: 232, name: "City", path: ["City"], fafsa_category: ["43d"], non_content: true, 
     note: [
         "If non-blank, first character must be non-blank.",
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
@@ -3902,7 +3903,7 @@ export const field_232 = {len: 30, pos_start: 2247, pos_end: 2277,
     ]};
 
 export const field_233 = {len: 2, pos_start: 2277, pos_end: 2279,
-    idx: 233, name: "State", path: ["State"], fafsa_category: "43e", 
+    idx: 233, name: "State", path: ["State"], fafsa_category: ["43e"], 
     validate: _validate_state_codes,
     note: [
         "Valid two letter code (See State Codes)",
@@ -3910,7 +3911,7 @@ export const field_233 = {len: 2, pos_start: 2277, pos_end: 2279,
     ]};
 
 export const field_234 = {len: 10, pos_start: 2279, pos_end: 2289,
-    idx: 234, name: "Zip Code", path: ["Zip_Code"], fafsa_category: "43f", 
+    idx: 234, name: "Zip Code", path: ["Zip_Code"], fafsa_category: ["43f"], 
     validate: _validate_options,
     options: [
       {op: "alphanumeric", },
@@ -3923,7 +3924,7 @@ export const field_234 = {len: 10, pos_start: 2279, pos_end: 2289,
     ]};
 
 export const field_235 = {len: 2, pos_start: 2289, pos_end: 2291,
-    idx: 235, name: "Country", path: ["Country"], fafsa_category: "43g", 
+    idx: 235, name: "Country", path: ["Country"], fafsa_category: ["43g"], 
     validate: _validate_country_codes,
     note: [
         "Valid two letter code (See Country Codes)",
@@ -3943,7 +3944,7 @@ export const section_parent_spouse_identity = /* #__PURE__ */ {
 //
 
 export const field_236 = {len: 1, pos_start: 2291, pos_end: 2292,
-    idx: 236, name: "Filed 1040 or 1040NR", path: ["Filed_1040_or_1040NR"], fafsa_category: "Parent Spouse or Partner Tax Filing Status\n44a", 
+    idx: 236, name: "Filed 1040 or 1040NR", path: ["Filed_1040_or_1040NR"], fafsa_category: ["44a","Parent Spouse or Partner Tax Filing Status"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -3958,7 +3959,7 @@ export const field_236 = {len: 1, pos_start: 2291, pos_end: 2292,
     ]};
 
 export const field_237 = {len: 1, pos_start: 2292, pos_end: 2293,
-    idx: 237, name: "Filed non-U.S. tax return", path: ["Filed_non_US_tax_return"], fafsa_category: "44b", 
+    idx: 237, name: "Filed non-U.S. tax return", path: ["Filed_non_US_tax_return"], fafsa_category: ["44b"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -3981,7 +3982,7 @@ export const field_237 = {len: 1, pos_start: 2292, pos_end: 2293,
     ]};
 
 export const field_238 = {len: 1, pos_start: 2293, pos_end: 2294,
-    idx: 238, name: "Tax Return Filing Status", path: ["Tax_Return_Filing_Status"], fafsa_category: "Parent Spouse or Partner 20xx Tax Return Information\n45a", 
+    idx: 238, name: "Tax Return Filing Status", path: ["Tax_Return_Filing_Status"], fafsa_category: ["45a","Parent Spouse or Partner 20xx Tax Return Information"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -3989,7 +3990,7 @@ export const field_238 = {len: 1, pos_start: 2293, pos_end: 2294,
         "2": "Married-Filed Joint Return",
         "3": "Married-Filed Separate Return",
         "4": "Head of Household",
-        "5": "Qualifying Surviving Spouse",
+        "5": "Qualifying surviving spouse",
       }},
     ],
     note: [
@@ -3997,12 +3998,12 @@ export const field_238 = {len: 1, pos_start: 2293, pos_end: 2294,
         "2 = Married-Filed Joint Return",
         "3 = Married-Filed Separate Return",
         "4 = Head of Household",
-        "5 = Qualifying Surviving Spouse",
+        "5 = Qualifying surviving spouse",
         "Blank"
     ]};
 
 export const field_239 = {len: 11, pos_start: 2294, pos_end: 2305,
-    idx: 239, name: "Income Earned from Work", path: ["Income_Earned_from_Work"], fafsa_category: "45b", 
+    idx: 239, name: "Income Earned from Work", path: ["Income_Earned_from_Work"], fafsa_category: ["45b"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -4013,7 +4014,7 @@ export const field_239 = {len: 11, pos_start: 2294, pos_end: 2305,
     ]};
 
 export const field_240 = {len: 11, pos_start: 2305, pos_end: 2316,
-    idx: 240, name: "Tax Exempt Interest Income", path: ["Tax_Exempt_Interest_Income"], fafsa_category: "45c", 
+    idx: 240, name: "Tax Exempt Interest Income", path: ["Tax_Exempt_Interest_Income"], fafsa_category: ["45c"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -4024,7 +4025,7 @@ export const field_240 = {len: 11, pos_start: 2305, pos_end: 2316,
     ]};
 
 export const field_241 = {len: 11, pos_start: 2316, pos_end: 2327,
-    idx: 241, name: "Untaxed Portions of IRA Distributions", path: ["Untaxed_Portions_of_IRA_Distributions"], fafsa_category: "45d", 
+    idx: 241, name: "Untaxed Portions of IRA Distributions", path: ["Untaxed_Portions_of_IRA_Distributions"], fafsa_category: ["45d"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -4035,7 +4036,7 @@ export const field_241 = {len: 11, pos_start: 2316, pos_end: 2327,
     ]};
 
 export const field_242 = {len: 11, pos_start: 2327, pos_end: 2338,
-    idx: 242, name: "IRA Rollover", path: ["IRA_Rollover"], fafsa_category: "45e", 
+    idx: 242, name: "IRA Rollover", path: ["IRA_Rollover"], fafsa_category: ["45e"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -4046,7 +4047,7 @@ export const field_242 = {len: 11, pos_start: 2327, pos_end: 2338,
     ]};
 
 export const field_243 = {len: 11, pos_start: 2338, pos_end: 2349,
-    idx: 243, name: "Untaxed Portions of Pensions", path: ["Untaxed_Portions_of_Pensions"], fafsa_category: "45f", 
+    idx: 243, name: "Untaxed Portions of Pensions", path: ["Untaxed_Portions_of_Pensions"], fafsa_category: ["45f"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -4057,7 +4058,7 @@ export const field_243 = {len: 11, pos_start: 2338, pos_end: 2349,
     ]};
 
 export const field_244 = {len: 11, pos_start: 2349, pos_end: 2360,
-    idx: 244, name: "Pension Rollover", path: ["Pension_Rollover"], fafsa_category: "45g", 
+    idx: 244, name: "Pension Rollover", path: ["Pension_Rollover"], fafsa_category: ["45g"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -4068,7 +4069,7 @@ export const field_244 = {len: 11, pos_start: 2349, pos_end: 2360,
     ]};
 
 export const field_245 = {len: 10, pos_start: 2360, pos_end: 2370,
-    idx: 245, name: "Adjusted Gross Income", path: ["Adjusted_Gross_Income"], fafsa_category: "45h", 
+    idx: 245, name: "Adjusted Gross Income", path: ["Adjusted_Gross_Income"], fafsa_category: ["45h"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"-999999999","max":"999999999"},
@@ -4079,7 +4080,7 @@ export const field_245 = {len: 10, pos_start: 2360, pos_end: 2370,
     ]};
 
 export const field_246 = {len: 9, pos_start: 2370, pos_end: 2379,
-    idx: 246, name: "Income Tax Paid", path: ["Income_Tax_Paid"], fafsa_category: "45i", 
+    idx: 246, name: "Income Tax Paid", path: ["Income_Tax_Paid"], fafsa_category: ["45i"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"999999999"},
@@ -4090,7 +4091,7 @@ export const field_246 = {len: 9, pos_start: 2370, pos_end: 2379,
     ]};
 
 export const field_247 = {len: 11, pos_start: 2379, pos_end: 2390,
-    idx: 247, name: "Deductible Payments to IRA, Keogh, Other", path: ["Deductible_Payments_to_IRA_Keogh_Other"], fafsa_category: "45j", 
+    idx: 247, name: "Deductible Payments to IRA, Keogh, Other", path: ["Deductible_Payments_to_IRA_Keogh_Other"], fafsa_category: ["45j"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"99999999999"},
@@ -4101,7 +4102,7 @@ export const field_247 = {len: 11, pos_start: 2379, pos_end: 2390,
     ]};
 
 export const field_248 = {len: 9, pos_start: 2390, pos_end: 2399,
-    idx: 248, name: "Education Credits", path: ["Education_Credits"], fafsa_category: "45k", 
+    idx: 248, name: "Education Credits", path: ["Education_Credits"], fafsa_category: ["45k"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"0","max":"999999999"},
@@ -4112,7 +4113,7 @@ export const field_248 = {len: 9, pos_start: 2390, pos_end: 2399,
     ]};
 
 export const field_249 = {len: 1, pos_start: 2399, pos_end: 2400,
-    idx: 249, name: "Filed Schedule A, B, D, E, F or H?", path: ["Filed_Schedule_A_B_D_E_F_or_H"], fafsa_category: "45l", 
+    idx: 249, name: "Filed Schedule A, B, D, E, F or H?", path: ["Filed_Schedule_A_B_D_E_F_or_H"], fafsa_category: ["45l"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -4129,7 +4130,7 @@ export const field_249 = {len: 1, pos_start: 2399, pos_end: 2400,
     ]};
 
 export const field_250 = {len: 12, pos_start: 2400, pos_end: 2412,
-    idx: 250, name: "Schedule C Amount", path: ["Schedule_C_Amount"], fafsa_category: "45m", 
+    idx: 250, name: "Schedule C Amount", path: ["Schedule_C_Amount"], fafsa_category: ["45m"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"-99999999999","max":"99999999999"},
@@ -4140,7 +4141,7 @@ export const field_250 = {len: 12, pos_start: 2400, pos_end: 2412,
     ]};
 
 export const field_251 = {len: 10, pos_start: 2412, pos_end: 2422,
-    idx: 251, name: "Foreign Income Exempt from Federal Taxation", path: ["Foreign_Income_Exempt_from_Federal_Taxation"], fafsa_category: "45n", 
+    idx: 251, name: "Foreign Earned Income Exclusion", path: ["Foreign_Earned_Income_Exclusion"], fafsa_category: ["45n"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"-999999999","max":"999999999"},
@@ -4151,7 +4152,7 @@ export const field_251 = {len: 10, pos_start: 2412, pos_end: 2422,
     ]};
 
 export const field_252 = {len: 1, pos_start: 2422, pos_end: 2423,
-    idx: 252, name: "Consent to Retrieve and Disclose FTI", path: ["Consent_to_Retrieve_and_Disclose_FTI"], fafsa_category: "Parent Spouse or Partner Consent and Signature \n46a", 
+    idx: 252, name: "Consent to Retrieve and Disclose FTI", path: ["Consent_to_Retrieve_and_Disclose_FTI"], fafsa_category: ["46a","Parent Spouse or Partner Consent, Approval, and Signature"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -4174,11 +4175,11 @@ export const section_parent_spouse_financial_manual = /* #__PURE__ */ {
 
 
 //*********************************************
-// Section: Parent Spouse or Partner Consent and Signature
+// Section: Parent Spouse or Partner Consent, Approval, and Signature
 //
 
 export const field_253 = {len: 1, pos_start: 2423, pos_end: 2424,
-    idx: 253, name: "Signature", path: ["Signature"], fafsa_category: "46b", 
+    idx: 253, name: "Signature", path: ["Signature"], fafsa_category: ["46b"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -4191,12 +4192,12 @@ export const field_253 = {len: 1, pos_start: 2423, pos_end: 2424,
     ]};
 
 export const field_254 = {len: 8, pos_start: 2424, pos_end: 2432,
-    idx: 254, name: "Signature Date", path: ["Signature_Date"], fafsa_category: "46c", 
+    idx: 254, name: "Signature Date", path: ["Signature_Date"], fafsa_category: ["46c"], 
     validate: _validate_date,
-    "allow_blank":true,"options":[{"op":"range","min":"20231231","max":"20250930"}],
+    "allow_blank":true,"options":[{"op":"range","min":"20231227","max":"20250930"}],
     note: [
         "Format is CCYYMMDD",
-        "20231231 to 20250930",
+        "20231227 to 20250930",
         "Blank"
     ]};
 
@@ -4210,7 +4211,7 @@ export const field_255 = {len: 50, pos_start: 2432, pos_end: 2482,
 
 
 export const section_parent_spouse_consent = /* #__PURE__ */ {
-    section: "Parent Spouse or Partner Consent and Signature",
+    section: "Parent Spouse or Partner Consent, Approval, and Signature",
     path: ["parent_spouse","consent"],
     field_list: [field_253, field_254, field_255],
 }
@@ -4221,7 +4222,7 @@ export const section_parent_spouse_consent = /* #__PURE__ */ {
 //
 
 export const field_256 = {len: 35, pos_start: 2482, pos_end: 2517,
-    idx: 256, name: "First Name", path: ["First_Name"], fafsa_category: "Preparer Identity\n47a", non_content: true, 
+    idx: 256, name: "First Name", path: ["First_Name"], fafsa_category: ["47a","Preparer Identity"], non_content: true, 
     note: [
         "First character must contain a letter and second character must be non-numeric",
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
@@ -4233,7 +4234,7 @@ export const field_256 = {len: 35, pos_start: 2482, pos_end: 2517,
     ]};
 
 export const field_257 = {len: 35, pos_start: 2517, pos_end: 2552,
-    idx: 257, name: "Last Name", path: ["Last_Name"], fafsa_category: "47b", non_content: true, 
+    idx: 257, name: "Last Name", path: ["Last_Name"], fafsa_category: ["47b"], non_content: true, 
     note: [
         "First character must contain a letter and second character must be non-numeric",
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
@@ -4245,7 +4246,7 @@ export const field_257 = {len: 35, pos_start: 2517, pos_end: 2552,
     ]};
 
 export const field_258 = {len: 9, pos_start: 2552, pos_end: 2561,
-    idx: 258, name: "Social Security Number", path: ["Social_Security_Number"], fafsa_category: "47c", 
+    idx: 258, name: "Social Security Number", path: ["Social_Security_Number"], fafsa_category: ["47c"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"001010001","max":"999999999"},
@@ -4256,7 +4257,7 @@ export const field_258 = {len: 9, pos_start: 2552, pos_end: 2561,
     ]};
 
 export const field_259 = {len: 9, pos_start: 2561, pos_end: 2570,
-    idx: 259, name: "EIN", path: ["EIN"], fafsa_category: "47d", 
+    idx: 259, name: "EIN", path: ["EIN"], fafsa_category: ["47d"], 
     validate: _validate_options,
     options: [
       {op: "range", "min":"000000000","max":"999999999"},
@@ -4267,7 +4268,7 @@ export const field_259 = {len: 9, pos_start: 2561, pos_end: 2570,
     ]};
 
 export const field_260 = {len: 30, pos_start: 2570, pos_end: 2600,
-    idx: 260, name: "Affiliation", path: ["Affiliation"], fafsa_category: "Preparer Information\n48a", non_content: true, 
+    idx: 260, name: "Affiliation", path: ["Affiliation"], fafsa_category: ["48a","Preparer Information"], non_content: true, 
     note: [
         "If non-blank, first character must be non-blank.",
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
@@ -4285,7 +4286,7 @@ export const field_260 = {len: 30, pos_start: 2570, pos_end: 2600,
     ]};
 
 export const field_261 = {len: 40, pos_start: 2600, pos_end: 2640,
-    idx: 261, name: "Street Address", path: ["Street_Address"], fafsa_category: "48b", non_content: true, 
+    idx: 261, name: "Street Address", path: ["Street_Address"], fafsa_category: ["48b"], non_content: true, 
     note: [
         "If non-blank, first character must be non-blank.",
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
@@ -4302,7 +4303,7 @@ export const field_261 = {len: 40, pos_start: 2600, pos_end: 2640,
     ]};
 
 export const field_262 = {len: 30, pos_start: 2640, pos_end: 2670,
-    idx: 262, name: "City", path: ["City"], fafsa_category: "48c", non_content: true, 
+    idx: 262, name: "City", path: ["City"], fafsa_category: ["48c"], non_content: true, 
     note: [
         "If non-blank, first character must be non-blank.",
         "Alphanumeric: 0 to 9 and uppercase and lowercase A to Z",
@@ -4316,7 +4317,7 @@ export const field_262 = {len: 30, pos_start: 2640, pos_end: 2670,
     ]};
 
 export const field_263 = {len: 2, pos_start: 2670, pos_end: 2672,
-    idx: 263, name: "State", path: ["State"], fafsa_category: "48d", 
+    idx: 263, name: "State", path: ["State"], fafsa_category: ["48d"], 
     validate: _validate_state_codes,
     note: [
         "Valid two letter code (See State Codes)",
@@ -4324,7 +4325,7 @@ export const field_263 = {len: 2, pos_start: 2670, pos_end: 2672,
     ]};
 
 export const field_264 = {len: 10, pos_start: 2672, pos_end: 2682,
-    idx: 264, name: "Zip Code", path: ["Zip_Code"], fafsa_category: "48e", 
+    idx: 264, name: "Zip Code", path: ["Zip_Code"], fafsa_category: ["48e"], 
     validate: _validate_options,
     options: [
       {op: "alphanumeric", },
@@ -4337,7 +4338,7 @@ export const field_264 = {len: 10, pos_start: 2672, pos_end: 2682,
     ]};
 
 export const field_265 = {len: 1, pos_start: 2682, pos_end: 2683,
-    idx: 265, name: "Signature", path: ["Signature"], fafsa_category: "Preparer Signature\n49a", 
+    idx: 265, name: "Signature", path: ["Signature"], fafsa_category: ["49a","Preparer Signature"], 
     validate: _validate_options,
     options: [
       {op: "enum", options: {
@@ -4350,12 +4351,12 @@ export const field_265 = {len: 1, pos_start: 2682, pos_end: 2683,
     ]};
 
 export const field_266 = {len: 8, pos_start: 2683, pos_end: 2691,
-    idx: 266, name: "Signature Date", path: ["Signature_Date"], fafsa_category: "49b", 
+    idx: 266, name: "Signature Date", path: ["Signature_Date"], fafsa_category: ["49b"], 
     validate: _validate_date,
-    "allow_blank":true,"options":[{"op":"range","min":"20231231","max":"20250930"}],
+    "allow_blank":true,"options":[{"op":"range","min":"20231227","max":"20250930"}],
     note: [
         "Format is CCYYMMDD",
-        "20231231 to 20250930",
+        "20231227 to 20250930",
         "Blank"
     ]};
 
@@ -4482,6 +4483,8 @@ export const field_276 = {len: 1, pos_start: 2777, pos_end: 2778,
         "4": "Last name mismatch",
         "5": "Address mismatch",
         "6": "Full match",
+        "7": "Inconclusive",
+        "": "Not needed",
       }},
     ],
     note: [
@@ -4491,7 +4494,8 @@ export const field_276 = {len: 1, pos_start: 2777, pos_end: 2778,
         "4 = Last name mismatch",
         "5 = Address mismatch",
         "6 = Full match",
-        "Blank"
+        "7 = Inconclusive",
+        "Blank = Not needed"
     ]};
 
 export const field_277 = {len: 1, pos_start: 2778, pos_end: 2779,
@@ -4505,6 +4509,8 @@ export const field_277 = {len: 1, pos_start: 2778, pos_end: 2779,
         "4": "Last name mismatch",
         "5": "Address mismatch",
         "6": "Full match",
+        "7": "Inconclusive",
+        "": "Not needed",
       }},
     ],
     note: [
@@ -4514,7 +4520,8 @@ export const field_277 = {len: 1, pos_start: 2778, pos_end: 2779,
         "4 = Last name mismatch",
         "5 = Address mismatch",
         "6 = Full match",
-        "Blank"
+        "7 = Inconclusive",
+        "Blank = Not needed"
     ]};
 
 export const field_278 = {len: 1, pos_start: 2779, pos_end: 2780,
@@ -4528,6 +4535,8 @@ export const field_278 = {len: 1, pos_start: 2779, pos_end: 2780,
         "4": "Last name mismatch",
         "5": "Address mismatch",
         "6": "Full match",
+        "7": "Inconclusive",
+        "": "Not needed",
       }},
     ],
     note: [
@@ -4537,7 +4546,8 @@ export const field_278 = {len: 1, pos_start: 2779, pos_end: 2780,
         "4 = Last name mismatch",
         "5 = Address mismatch",
         "6 = Full match",
-        "Blank"
+        "7 = Inconclusive",
+        "Blank = Not needed"
     ]};
 
 export const field_279 = {len: 1, pos_start: 2780, pos_end: 2781,
@@ -4551,6 +4561,8 @@ export const field_279 = {len: 1, pos_start: 2780, pos_end: 2781,
         "4": "Last name mismatch",
         "5": "Address mismatch",
         "6": "Full match",
+        "7": "Inconclusive",
+        "": "Not needed",
       }},
     ],
     note: [
@@ -4560,7 +4572,8 @@ export const field_279 = {len: 1, pos_start: 2780, pos_end: 2781,
         "4 = Last name mismatch",
         "5 = Address mismatch",
         "6 = Full match",
-        "Blank"
+        "7 = Inconclusive",
+        "Blank = Not needed"
     ]};
 
 export const field_280 = {len: 2, pos_start: 2781, pos_end: 2783,
@@ -4671,13 +4684,12 @@ export const field_286 = {len: 1, pos_start: 2793, pos_end: 2794,
 
 export const field_287 = {len: 7, pos_start: 2794, pos_end: 2801,
     idx: 287, name: "Electronic Transaction Indicator Destination Number", alias: "ETI", path: ["Electronic_Transaction_Indicator_Destination_Number"], 
-    extra: ["TG number assigned by SAIG."],
     validate: _validate_options,
     options: [
       {op: "eti_destination", },
     ],
     note: [
-        "“TGXXXXX” where XXXXX is the 5-digit alphanumeric code assigned by SAIG staff",
+        "“FTXXXXX” where XXXXX is the 5-digit alphanumeric code assigned by SAIG staff",
         "Blank"
     ]};
 
@@ -4852,6 +4864,8 @@ export const field_297 = {len: 1, pos_start: 2811, pos_end: 2812,
       }},
     ],
     note: [
+        "Y = Selected",
+        "N = Not selected",
         "* = A subsequent transaction was selected for verification"
     ]};
 
@@ -5034,10 +5048,10 @@ export const field_312 = {len: 15, pos_start: 2955, pos_end: 2970,
     idx: 312, name: "Parent Contribution", alias: "PC", path: ["parent","Contribution"], 
     validate: _validate_options,
     options: [
-      {op: "range", "min":"-99999999999999","max":"999999999999999"},
+      {op: "range", "min":"0","max":"999999999999999"},
     ],
     note: [
-        "-99999999999999 to 999999999999999",
+        "0 to 999999999999999",
         "Blank"
     ]};
 
@@ -6324,7 +6338,7 @@ export const field_464 = {len: 3, pos_start: 3579, pos_end: 3582,
     ]};
 
 export const field_465 = {len: 3, pos_start: 3582, pos_end: 3585,
-    idx: 465, name: "Student Spouse Foreign Income Exempt from Federal Taxation Correction, Highlight, and Verify Flags", path: ["student_spouse","Foreign_Income_Exempt_from_Federal_Taxation"], 
+    idx: 465, name: "Student Spouse Foreign Earned Income Exclusion Correction, Highlight, and Verify Flags", path: ["student_spouse","Foreign_Earned_Income_Exclusion"], 
     validate: _validate_correction,
     "empty":"000",
     note: [
@@ -6732,7 +6746,7 @@ export const field_515 = {len: 3, pos_start: 3732, pos_end: 3735,
     ]};
 
 export const field_516 = {len: 3, pos_start: 3735, pos_end: 3738,
-    idx: 516, name: "Parent Foreign Income Exempt from Federal Taxation Correction, Highlight, and Verify Flags", path: ["parent","Foreign_Income_Exempt_from_Federal_Taxation"], 
+    idx: 516, name: "Parent Foreign Earned Income Exclusion Correction, Highlight, and Verify Flags", path: ["parent","Foreign_Earned_Income_Exclusion"], 
     validate: _validate_correction,
     "empty":"000",
     note: [
@@ -7028,7 +7042,7 @@ export const field_552 = {len: 3, pos_start: 3843, pos_end: 3846,
     ]};
 
 export const field_553 = {len: 3, pos_start: 3846, pos_end: 3849,
-    idx: 553, name: "Parent Spouse or Partner Foreign Income Exempt from Federal Taxation Correction, Highlight, and Verify Flags", path: ["parent_spouse","Foreign_Income_Exempt_from_Federal_Taxation"], 
+    idx: 553, name: "Parent Spouse or Partner Foreign Earned Income Exclusion Correction, Highlight, and Verify Flags", path: ["parent_spouse","Foreign_Earned_Income_Exclusion"], 
     validate: _validate_correction,
     "empty":"000",
     note: [
@@ -7147,7 +7161,8 @@ export const field_560 = {len: 1, pos_start: 3875, pos_end: 3876,
         "4 = Default and overpayment",
         "5 = Processed in Realtime",
         "7 = Match and no data provided",
-        "8 = Not sent"
+        "8 = Not sent",
+        "Blank"
     ]};
 
 export const field_561 = {len: 6, pos_start: 3876, pos_end: 3882,
@@ -7269,7 +7284,8 @@ export const field_563 = {len: 1, pos_start: 3883, pos_end: 3884,
         "5 = Deceased",
         "6 = SSN not verified",
         "8 = Not sent",
-        "9 = Not needed"
+        "9 = Not needed",
+        "Blank"
     ]};
 
 export const field_564 = {len: 1, pos_start: 3884, pos_end: 3885,
@@ -7295,7 +7311,8 @@ export const field_564 = {len: 1, pos_start: 3884, pos_end: 3885,
         "5 = Deceased",
         "6 = SSN not verified",
         "8 = Not sent",
-        "9 = Not needed"
+        "9 = Not needed",
+        "Blank"
     ]};
 
 export const field_565 = {len: 1, pos_start: 3885, pos_end: 3886,
@@ -7321,7 +7338,8 @@ export const field_565 = {len: 1, pos_start: 3885, pos_end: 3886,
         "5 = Deceased",
         "6 = SSN not verified",
         "8 = Not sent",
-        "9 = Not needed"
+        "9 = Not needed",
+        "Blank"
     ]};
 
 export const field_566 = {len: 1, pos_start: 3886, pos_end: 3887,
@@ -7347,7 +7365,8 @@ export const field_566 = {len: 1, pos_start: 3886, pos_end: 3887,
         "5 = Deceased",
         "6 = SSN not verified",
         "8 = Not sent",
-        "9 = Not needed"
+        "9 = Not needed",
+        "Blank"
     ]};
 
 export const field_567 = {len: 1, pos_start: 3887, pos_end: 3888,
@@ -7531,9 +7550,8 @@ export const field_576 = {len: 110, pos_start: 3957, pos_end: 4067,
       {op: "alphanumeric", },
     ],
     note: [
-        "Uppercase letters",
-        "A to Z Numbers",
-        "1 to 99",
+        "Uppercase letters A to Z",
+        "Numbers 1 to 99",
         "Blank = Applicant not rejected"
     ]};
 
@@ -7549,7 +7567,13 @@ export const field_577 = {len: 1, pos_start: 4067, pos_end: 4068,
         "5": "School did not generate transaction, FPS system generated",
         "6": "School generated, ISIR request school",
         "7": "School did not generate, ISIR Request school",
-        "": "School is not found or not participating",
+        "A": "State Resident, receives ISIRs daily",
+        "B": "Non-Resident, receives ISIRs daily",
+        "C": "State Resident, ISIR Pushed",
+        "D": "Non-Resident, ISIR Pushed",
+        "E": "State Resident, ISIR Request State",
+        "F": "Non-Resident, ISIR Request State",
+        "": "School or state is not found or not participating",
       }},
     ],
     note: [
@@ -7560,7 +7584,13 @@ export const field_577 = {len: 1, pos_start: 4067, pos_end: 4068,
         "5 = School did not generate transaction, FPS system generated",
         "6 = School generated, ISIR request school",
         "7 = School did not generate, ISIR Request school",
-        "Blank = School is not found or not participating"
+        "A = State Resident, receives ISIRs daily",
+        "B = Non-Resident, receives ISIRs daily",
+        "C = State Resident, ISIR Pushed",
+        "D = Non-Resident, ISIR Pushed",
+        "E = State Resident, ISIR Request State",
+        "F = Non-Resident, ISIR Request State",
+        "Blank = School or state is not found or not participating"
     ]};
 
 export const field_578 = {len: 1, pos_start: 4068, pos_end: 4069,
@@ -7863,17 +7893,13 @@ export const field_594 = {len: 1, pos_start: 4494, pos_end: 4495,
     validate: _validate_options,
     options: [
       {op: "enum", options: {
-        "C": "Conditional",
         "D": "Death",
-        "M": "Multiple",
         "N": "None",
         "P": "Permanent",
       }},
     ],
     note: [
-        "C = Conditional",
         "D = Death",
-        "M = Multiple",
         "N = None",
         "P = Permanent",
         "Blank"
@@ -8664,9 +8690,13 @@ export const field_646 = {len: 8, pos_start: 4669, pos_end: 4677,
     validate: _validate_options,
     options: [
       {op: "numeric", },
+      {op: "enum", options: {
+        "N/A": "N/A",
+      }},
     ],
     note: [
         "Numeric",
+        "N/A",
         "Blank"
     ]};
 
@@ -8809,9 +8839,13 @@ export const field_658 = {len: 8, pos_start: 4744, pos_end: 4752,
     validate: _validate_options,
     options: [
       {op: "numeric", },
+      {op: "enum", options: {
+        "N/A": "N/A",
+      }},
     ],
     note: [
         "Numeric",
+        "N/A",
         "Blank"
     ]};
 
@@ -8953,9 +8987,13 @@ export const field_670 = {len: 8, pos_start: 4819, pos_end: 4827,
     validate: _validate_options,
     options: [
       {op: "numeric", },
+      {op: "enum", options: {
+        "N/A": "N/A",
+      }},
     ],
     note: [
         "Numeric",
+        "N/A",
         "Blank"
     ]};
 
