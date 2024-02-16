@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang=en dir=ltr>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/imm-dom@0.3.3/umd/imm_dom.min.js" crossorigin="anonymous"></script>
+
+    <style>
+        :not(:defined) { display:none }
+        body { padding: 2rem; }
+
+        header {
+            --header-color: #e8e8e8;
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1rem;
+
+            &>aside {
+                display: flex;
+                gap: 0.5rem;
+                border-bottom: 2px solid var(--header-color);
+
+                &>h3 {
+                    margin: 0;
+                    text-align: center;
+                    writing-mode: vertical-rl;
+                    text-orientation: sideways;
+                    background-color: var(--header-color);
+                    padding: 0.5rem;
+                    transform: rotate(-0.5turn);
+                }
+            }
+        }
+        label { margin-bottom: 0.5rem; }
+
+        #output {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+        }
+
+        th { user-select: none; }
+        .fafsa-family [data-field]::before {
+            display: block;
+            font-weight: bold;
+            font-size: 8pt;
+            font-variant: small-caps;
+            content: attr(data-field) ':';
+            margin-block-end: 0.2em;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Mock FAFSA information for test ISIR generation</h1>
+<header>
+    <button onClick="window.location.reload();">Regenerate</button>
+    <div>
+        <b>Note:</b>
+        <ul>
+            <li>All personally identifiable information (PII) here is mock data and does not reflect real people.
+            <li>Mock data is generated using <a target=_blank href="https://fakerjs.dev/">Faker.js</a> library per software test engineering practices.
+        </ul>
+    </div>
+</header>
+
+<output id=output>
+</output>
+
+<script type="module">
+import { fakerEN_US as faker } from "https://cdn.jsdelivr.net/npm/@faker-js/faker@8.4.0/dist/esm/index.mjs";
+globalThis.faker = faker // expose for interactive prototyping in browser console
+
+const el_output = () => document.getElementById('output')
+
+const {imm, imm_set, imm_html: html} = globalThis.imm_dom
+
+function fafsa_family_to_table(fafsa_gen_family = genAllPeople()) {
+    const {th, tr, td, span} = html
+
+    for (let [person_role, person] of Object.entries(fafsa_gen_family)) {
+        let el_table = html.table({class:'pure-table fafsa-family'})
+        imm(el_table, html.thead(tr(th(`${person_role}`))))
+        let el_tbody = html.tbody()
+
+        for (let [k, v] of Object.entries(person))
+            imm(el_tbody, tr( td( span({data_field: k}, `${v}`)) ))
+
+        imm(el_output(), imm(el_table, el_tbody))
+    }
+}
+
+fafsa_family_to_table()
+
+function genAddress() {
+    let state = faker.location.state({abbreviated: true})
+    return {
+        'Street Address': faker.location.streetAddress(),
+        'City': faker.location.city({state}),
+        'State': state,
+        'Zip Code': faker.location.zipCode({state}),
+        'Country': 'US',
+    }
+}
+
+function genPersonInfo({lastName, suffix, address, age}) {
+    let firstName = faker.person.firstName()
+    let middleName = faker.person.middleName()
+    lastName ||= faker.person.lastName()
+
+    let ssn
+    while (!ssn || ssn[0]=='6' || ssn[0]=='9')
+        ssn = faker.string.numeric(9) // generate a mock SSN, but avoid 6XX and 9XX numbers because they have special meanings
+
+    return {
+        'First Name': firstName,
+        'Middle Name': middleName,
+        'Last Name': lastName,
+        'Suffix': suffix ? faker.helpers.arrayElement(suffix) : faker.person.suffix(),
+        'Date of Birth': faker.date.birthdate(age).toISOString().replace(/T.*$/,'').replace(/\D/g,''),
+
+        'Social Security Number': ssn,
+        'ITIN': ' '.repeat(9),
+
+        'Phone': faker.phone.number().replace(/\D/g,'').replace(/\s*x.*$/,'').slice(-10),
+        'Email': faker.internet.email(0.5 > faker.number.float() ? {} : {firstName, middleName, lastName}),
+        ... address,
+    }
+}
+
+function genAllPeople(opt) {
+    // use same lastName some of the time
+    let shared = {
+        lastName: 0.5 > faker.number.float() ? faker.person.lastName() : null,
+        address: genAddress(),
+    }
+
+    let res = {}
+    res.transaction = {
+        'FAFSA UUID': faker.string.uuid(),
+        'Transaction UUID': faker.string.uuid(),
+        'Person UUID': faker.string.uuid(),
+    }
+    res.student = genPersonInfo({...shared, age:{mode:'age', min: 16, max: 20}, suffix: ['', '', '', '', '', '', 'I', 'II']})
+    res.spouse = genPersonInfo(_variant({age:{mode:'age', min: 18}}))
+    res.parent = genPersonInfo(_variant({age:{mode:'age', min: 28}}))
+    res.parent_spouse = genPersonInfo(_variant({age:{mode:'age', min: 18}}))
+    return res
+
+    function _variant(kw) {
+        let _var_opt = {... shared, ... kw}
+        if (0.5 > faker.number.float())
+            _var_opt.lastName = null
+        if (0.2 > faker.number.float())
+            _var_opt.address = genAddress()
+        return _var_opt }
+}
+</script>
