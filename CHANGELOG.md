@@ -8,7 +8,7 @@ Initial release of project supporting ISIR Layout specification released today, 
 
 ### Test ISIRs Changes
 
-- Updated field 297, postion 2812, to `"N"` for 8 published test ISIRs, per specification requirement.
+- Updated field 297, position 2812, to `"N"` for 8 published test ISIRs, per specification requirement.
 
 ### Code Changes
 
