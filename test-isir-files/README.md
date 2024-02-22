@@ -8,6 +8,7 @@ The following test ISIRs are currently available. Additional test ISIRs will be 
 | Filename | Description |
 |----------|-------------|
 | [`IDSA25OP.zip`](https://fsapartners.ed.gov/sites/default/files/attachments/2023-09/IDSA25OP.zip)| Original file from 9/28/23 containing three test scenarios |
+| [`IDSA25OP-with-fixed-padding-and-headers.dat.txt`](./IDSA25OP-with-fixed-padding-and-headers.dat.txt) | Fixed padding and SAIG headers for original file from 9/28/23 containing three test scenarios |
 | [`test-isir-file-2024-25.dat.txt`](./test-isir-file-2024-25.dat.txt) | New single file containing ISIR records for all below scenarios |
 
 | Scenario | Description |
