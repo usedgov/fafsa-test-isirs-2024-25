@@ -862,7 +862,12 @@ function _check_date(sz) {
 }
 const _validate_date = (sz_value, field) => _validate_options(sz_value, field) && _check_date(sz_value)
 const _validate_yearmonth = (sz_value, field) => _validate_options(sz_value, field) && _check_date(sz_value.length==6 ? sz_value+'01' : sz_value)
-const _validate_fixed_decimal = (sz_value) => /\d*/.test(sz_value)
+const _validate_fixed_decimal = (sz_value, field) => {
+    if(sz_value.trim() && sz_value.trim().length !== field.len) {
+        return false;
+    }
+    return /\d*/.test(sz_value)
+}
 
 const _rx_correction_highlight_verify_flags = /^(?<correction>[012])(?<highlight>[01])(?<verify>[012])$/
 const _validate_correction = (sz_value) => {
