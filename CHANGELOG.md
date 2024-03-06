@@ -72,10 +72,10 @@ Initial release of project supporting ISIR Layout specification released today, 
 
 ### Code Changes
 
-- Updated `isir-module.js` from [2024-25 FAFSA Specification Guide (March 2024 Update #2)](https://fsapartners.ed.gov/knowledge-center/library/handbooks-manuals-or-guides/2023-05-31/2024-25-fafsa-specifications-guide-march-2024-update-2)
+- Updated `isir-module.js` from [2024-25 FAFSA Specification Guide (March 2024 Update #2)](https://fsapartners.ed.gov/knowledge-center/library/handbooks-manuals-or-guides/2023-05-31/2024-25-fafsa-specifications-guide-march-2024-update-2). These updates are also incorporated into `isir-viewer.html` and `isir-from-spreadsheet.html`.
     - Minimum for _Parent Contribution_ field 312 set to `-1500` (previously `0`)
     - `Blank` removed as valid option from Student birthdate for field 29
-    - `Blank` added as valid option for field 518 _Use User Provided Data Only_
+    - `Blank` added as valid option for field 581 _Use User Provided Data Only_
     - `Blank` added as valid option for NSLDS Loan Change Flag fields 723, 746, 769, 792, 815, and 838
     - `Blank` added as valid option for FTI fields 861, 881, and 942
     - added `"FC"` to lookup for valid State Codes per header in Table 4-4 of the ISIR Layout specification guide.
