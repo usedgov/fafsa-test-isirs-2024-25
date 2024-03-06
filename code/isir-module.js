@@ -46,7 +46,7 @@ export function isir_field_read(field, isir_frame, mode) {
  * @returns {value: string, field: ISIRField, result?:*, invalid?:bool|string}
  */
 export function isir_field_validate(field, value, mode) {
-    let valid, res={__proto__: {field}, value}, issues=[]
+    let valid, res={__proto__: {field}, raw: value, value}, issues=[]
     value = `${value}`.trimEnd()
 
     // Detect left-padding spaces or zero issues. Spec change from prior years.
@@ -64,9 +64,13 @@ export function isir_field_validate(field, value, mode) {
         valid = field.validate?.(value, field)
     }
 
-    if (valid && 'object' == typeof valid) {
-        res.result = valid.result
-        valid = valid.valid ?? true
+    res.value = value
+    if (valid) {
+        res.result = value
+        if ('object' == typeof valid) {
+            res.result = valid.result
+            valid = valid.valid ?? true
+        }
     }
 
     if (false == valid)
@@ -344,7 +348,7 @@ function _init_isir_model() {
 // ISIR field validator logic implementations
 //
 
-const _validate_expect = (sz_value, field) => sz_value == field.expect
+const _validate_expect = (sz_value, field) => (sz_value == field.expect) || (field.allow_blank ? sz_value == '' : false)
 
 function _check_date(sz) {
     if ('' === sz) return;
@@ -791,6 +795,10 @@ export const valid_state_codes = {
   // Canada and Mexico state codes
   'CN': 1, // Canada
   'MX': 1, // Mexico
+
+  // FC for Foreign Country as State Code per table 4-4 
+  // of Volume 4, Record Layouts and Processing Codes
+  'FC': 1, // Foreign Country
 }
 const _validate_state_codes = (sz_value) => 1 === valid_state_codes[sz_value]
 
@@ -1246,8 +1254,7 @@ export const field_29 = {len: 8, pos_start: 337, pos_end: 345,
         " 09\t01-30",
         " 10\t01-31",
         " 11\t01-30",
-        " 12\t01-31",
-        "Blank"
+        " 12\t01-31"
     ]};
 
 export const field_30 = {len: 9, pos_start: 345, pos_end: 354,
@@ -5220,10 +5227,10 @@ export const field_312 = {len: 15, pos_start: 2955, pos_end: 2970,
     idx: 312, name: "Parent Contribution", alias: "PC", path: ["parent","Contribution"], 
     validate: _validate_options, allow_blank: true,
     options: [
-      {op: "range", "min":"0","max":"999999999999999"},
+      {op: "range", "min":"-1500","max":"999999999999999"},
     ],
     note: [
-        "0 to 999999999999999",
+        "-1500 to 999999999999999",
         "Blank"
     ]};
 
@@ -7588,7 +7595,7 @@ export const field_580 = {len: 1, pos_start: 4081, pos_end: 4082,
 
 export const field_581 = {len: 5, pos_start: 4082, pos_end: 4087,
     idx: 581, name: "Use User Provided Data Only", path: ["Use_User_Provided_Data_Only"], 
-    validate: _validate_options, empty: "False",
+    validate: _validate_options, allow_blank: true, empty: "False",
     options: [
       {op: "enum", options: {
         "True": "True",
@@ -7597,7 +7604,8 @@ export const field_581 = {len: 5, pos_start: 4082, pos_end: 4087,
     ],
     note: [
         "True",
-        "False"
+        "False",
+        "Blank"
     ]};
 
 export const field_582 = {len: 361, pos_start: 4087, pos_end: 4448,
@@ -9579,7 +9587,8 @@ export const field_723 = {len: 1, pos_start: 5126, pos_end: 5127,
     ],
     note: [
         "# = Changed",
-        "N = Did not change"
+        "N = Did not change",
+        "Blank"
     ]};
 
 export const field_724 = {len: 2, pos_start: 5127, pos_end: 5129,
@@ -9920,7 +9929,8 @@ export const field_746 = {len: 1, pos_start: 5248, pos_end: 5249,
     ],
     note: [
         "# = Changed",
-        "N = Did not change"
+        "N = Did not change",
+        "Blank"
     ]};
 
 export const field_747 = {len: 2, pos_start: 5249, pos_end: 5251,
@@ -10250,7 +10260,8 @@ export const field_769 = {len: 1, pos_start: 5370, pos_end: 5371,
     ],
     note: [
         "# = Changed",
-        "N = Did not change"
+        "N = Did not change",
+        "Blank"
     ]};
 
 export const field_770 = {len: 2, pos_start: 5371, pos_end: 5373,
@@ -10581,7 +10592,8 @@ export const field_792 = {len: 1, pos_start: 5492, pos_end: 5493,
     ],
     note: [
         "# = Changed",
-        "N = Did not change"
+        "N = Did not change",
+        "Blank"
     ]};
 
 export const field_793 = {len: 2, pos_start: 5493, pos_end: 5495,
@@ -10910,7 +10922,8 @@ export const field_815 = {len: 1, pos_start: 5614, pos_end: 5615,
     ],
     note: [
         "# = Changed",
-        "N = Did not change"
+        "N = Did not change",
+        "Blank"
     ]};
 
 export const field_816 = {len: 2, pos_start: 5615, pos_end: 5617,
@@ -11239,7 +11252,8 @@ export const field_838 = {len: 1, pos_start: 5736, pos_end: 5737,
     ],
     note: [
         "# = Changed",
-        "N = Did not change"
+        "N = Did not change",
+        "Blank"
     ]};
 
 export const field_839 = {len: 2, pos_start: 5737, pos_end: 5739,
@@ -11569,10 +11583,11 @@ export const field_860 = {len: 50, pos_start: 7035, pos_end: 7085,
 
 export const field_861 = {len: 11, pos_start: 7085, pos_end: 7096,
     idx: 861, name: null, 
-    validate: _validate_expect,
+    validate: _validate_expect, allow_blank: true,
     expect: "CUI//SP-TAX", non_content: true,
     note: [
-        "Exact string: “CUI//SP-TAX”"
+        "Exact string: “CUI//SP-TAX”",
+        "Blank"
     ]};
 
 export const field_862 = {len: 4, pos_start: 7096, pos_end: 7100,
@@ -11835,7 +11850,8 @@ export const field_881 = {len: 3, pos_start: 7206, pos_end: 7209,
         "203 = PII Match Failed",
         "206 = Partial Delivery of Content",
         "212 = Cannot Verify Return Data",
-        "214 = No Return on File"
+        "214 = No Return on File",
+        "Blank"
     ]};
 
 
@@ -12665,10 +12681,11 @@ export const field_941 = {len: 3, pos_start: 7545, pos_end: 7548,
 
 export const field_942 = {len: 11, pos_start: 7548, pos_end: 7559,
     idx: 942, name: null, 
-    validate: _validate_expect,
+    validate: _validate_expect, allow_blank: true,
     expect: "CUI//SP-TAX", non_content: true,
     note: [
-        "Exact string: “CUI//SP-TAX”"
+        "Exact string: “CUI//SP-TAX”",
+        "Blank"
     ]};
 
 export const field_943 = {len: 50, pos_start: 7559, pos_end: 7609,
