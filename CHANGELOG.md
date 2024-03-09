@@ -80,3 +80,11 @@ Initial release of project supporting ISIR Layout specification released today, 
     - `Blank` added as valid option for FTI fields 861, 881, and 942
     - added `"FC"` to lookup for valid State Codes per header in Table 4-4 of the ISIR Layout specification guide.
     - added `.raw` field value alongside trimmed `.value` to `isir_field_validate()` result
+
+
+## 2024-03-09
+
+### Test ISIRs Changes
+
+- Added the updated [system-generated ISIR file](https://fsapartners.ed.gov/knowledge-center/library/handbooks-manuals-or-guides/2023-05-31/2024-25-fafsa-specifications-guide-march-2024-update) to the [test-isir-files folder](/test-isir-files). Changes to the file are outlined in the March 8th updates on the [2024–25 FAFSA Updates page](https://fsapartners.ed.gov/knowledge-center/topics/fafsa-simplification-information/2024-25-fafsa-updates#pid_1399062) on the FSA Knowledge Center.
+
