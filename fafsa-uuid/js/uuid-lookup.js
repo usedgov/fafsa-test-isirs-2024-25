@@ -27,12 +27,12 @@ export const uuid_search_api = {
 
     async _update_status(uuid_search, el_status) {
         do {
-            let ans = window.uuid_trie.lookup(uuid_search)
+            let match_found = window.uuid_trie.lookup(uuid_search)
 
-            if (ans) {
-                return imm_set(el_status, {class:'hint-present'}, imm_html.b('Go.'), ' Free of known issues')
+            if (match_found) {
+                return imm_set(el_status, {class:'hint-match'}, imm_html.b('Present'))
             } else if ('ready' == document.documentElement.dataset.status) {
-                return imm_set(el_status, {class:'hint-absent'}, imm_html.b('No-go.'))
+                return imm_set(el_status, {class:'hint-nomatch'}, imm_html.b('Not'), ' present')
             } else if (!el_status.className) {
                 imm_set(el_status, {class:'hint-caution'}, imm_html.i('(searching)'))
             }
