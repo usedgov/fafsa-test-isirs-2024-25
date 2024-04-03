@@ -28,6 +28,9 @@ The following tools are currently available. These tools have limited ongoing su
 
 To download a tool: select the file, and on the resulting page click the "Download raw file" button in the upper right menu.
 
+**[`fafsa-uuid-search.html`](./fafsa-uuid/fafsa-uuid-search.html)**  
+This tool allows searching a CSV file of up to 10 million UUIDs. [Read more](./fafsa-uuid/README.md)
+
 **[`isir-viewer.html`](./isir-viewer.html)**  
 This standalone tool can intake a file of ISIRs with `.dat` or `.txt` extension, conduct light field-level validation, export the data as an Excel spreadsheet, and display both the ISIR data and validation results in a simple browser-based user interface.
 1. Download the [`isir-viewer.html`](./isir-viewer.html) file.
