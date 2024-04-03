@@ -10,19 +10,19 @@ export const uuid_search_api = {
     history: new Map(),
 
     search(uuid_search) {
-        if (this.history.has(uuid_search))
-            return
-
-        let el_status = imm_html.td()
-        this.history.set(uuid_search, el_status)
-        this._update_status(uuid_search, el_status)
-
-        imm(window.search_result_tbody, {
-            $: imm_html.tr(
+        let el_search_result = this.history.get(uuid_search)
+        if (null == el_search_result) {
+            let el_status = imm_html.td()
+            el_search_result = imm_html.tr(
                 {class: 'search-result'},
                 imm_html.td(`${uuid_search}`),
                 el_status)
-        })
+            this.history.set(uuid_search, el_search_result)
+
+            this._update_status(uuid_search, el_status)
+        }
+
+        window.search_result_tbody.prepend(el_search_result)
     },
 
     async _update_status(uuid_search, el_status) {
