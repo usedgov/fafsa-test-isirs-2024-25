@@ -1,5 +1,6 @@
 import {aiter_stream_lines} from "https://cdn.jsdelivr.net/npm/csv-iter-parse@0.1.3/src/aiter-utils.js"
 import {imm, imm_set, imm_html, imm_raf} from 'https://cdn.jsdelivr.net/npm/imm-dom@0.3.7/esm/index.min.js'
+import {blob_as_download} from 'https://cdn.jsdelivr.net/npm/imm-dom@0.3.7/esm/util/blob.min.js'
 import {create_uuid_trie} from './uuid-trie.js'
 
 const fafsa_uuid_model = {
@@ -70,7 +71,45 @@ const fafsa_uuid_model = {
             this.search(uuid)
     },
 
-    evt_form(evt) {
+    async evt_bulk_search_form(evt) {
+        evt.preventDefault()
+        const {matching_lines, bulk_query_file_src} = Object.fromEntries(new FormData(evt.target))
+        const keep_matching_lines = 'remove' != matching_lines
+
+        const uuid_trie = this.uuid_trie
+        let result_lines = []
+        for await (let [uuid_search, ln_query, line_no] of this._aiter_bulk_query_lines(bulk_query_file_src.stream())) {
+            if (!uuid_search && 1>=line_no) {
+                // Likely header line, keep it
+                result_lines.push(ln_query, '\r\n')
+                continue
+            }
+
+            let match = null != uuid_trie.lookup(uuid_search)
+            if ((match && keep_matching_lines) || (!match && !keep_matching_lines)) {
+                result_lines.push(ln_query, '\r\n')
+            }
+        }
+        
+        {
+            let {name, type} = bulk_query_file_src
+            name = `Bulk ${matching_lines} query -- ${name}`
+
+            let download_link = imm(blob_as_download(name, new Blob(result_lines, {type})), name)
+            imm_set(window.bulk_search_result, download_link)
+            download_link.click()
+        }
+    },
+    async * _aiter_bulk_query_lines(file_stream) {
+        const rx_uuid = /[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/
+        let line_no = 0
+        for await (let ln_query of aiter_stream_lines(file_stream)) {
+            let [uuid] = rx_uuid.exec(ln_query) || []
+            yield [uuid, ln_query, ++line_no]
+        }
+    },
+
+    evt_search_form(evt) {
         evt.preventDefault()
         let frm = new FormData(evt.target)
         return this.search(frm.get('uuid_search'))
@@ -91,7 +130,7 @@ const fafsa_uuid_model = {
         try {
             // Determine FAFSA UUID semantic from CSV header line
             let {value: ln_header} = await aiter_lines.next()
-            console.log('CSV header: %o')
+            console.log('CSV header: %o', ln_header)
             this._determine_csv_semantic(ln_header)
 
             this.uuid_trie = window.uuid_trie = create_uuid_trie()
