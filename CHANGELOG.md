@@ -93,3 +93,13 @@ Initial release of project supporting ISIR Layout specification released today, 
 
 ### Added Tools
 - Added [`fafsa-uuid-search.html`](./fafsa-uuid/fafsa-uuid-search.html) to allow searching a CSV file of up to 10 million UUIDs.
+
+
+## 2024-04-04
+
+### Code Changes
+
+- Updated fafsa-uuid-search.html
+    - Added functionality to upload a custom CSV of FAFSA UUIDs to compare against the Department-provided CSVs. This functionality provides search results showing matches and non-matches along with the ability to export a CSV of the results.
+    - UI improvements
+
