@@ -25,24 +25,30 @@ const fafsa_uuid_model = {
     _detail_by_semantic: {
         potentially_affected: {
             label: 'potentially affected applications',
-            render_match: el_status =>
-                imm_set(el_status, {class:'search-result-potentially-affected'}, 'Potentially affected'),
-            render_absent: el_status =>
-                imm_set(el_status, {class:'search-result-unaffected'}, 'Unaffected'),
+            msg_match: 'Potentially affected',
+            msg_absent: 'Unaffected',
+            render_match(el_status) {
+                return imm_set(el_status, {class:'search-result-potentially-affected'}, this.msg_match) },
+            render_absent(el_status) {
+                return imm_set(el_status, {class:'search-result-unaffected'}, this.msg_absent) },
         },
         unaffected: {
             label: 'unaffected applications',
-            render_match: el_status =>
-                imm_set(el_status, {class:'search-result-unaffected'}, 'Unaffected'),
-            render_absent: el_status =>
-                imm_set(el_status, {class:'search-result-potentially-affected'}, 'Potentially affected'),
+            msg_match: 'Unaffected',
+            msg_absent: 'Potentially affected',
+            render_match(el_status) {
+                return imm_set(el_status, {class:'search-result-unaffected'}, this.msg_match) },
+            render_absent(el_status) {
+                return imm_set(el_status, {class:'search-result-potentially-affected'}, this.msg_absent) },
         },
         neutral: {
             label: 'unknown semantics',
-            render_match: el_status =>
-                imm_set(el_status, {class:'search-result-match'}, 'Present'),
-            render_absent: el_status =>
-                imm_set(el_status, {class:'search-result-nomatch'}, imm_html.b('Not'), ' present'),
+            msg_match: 'Present',
+            msg_absent: 'Not present',
+            render_match(el_status) {
+                return imm_set(el_status, {class:'search-result-match'}, this.msg_match) },
+            render_absent(el_status) {
+                return imm_set(el_status, {class:'search-result-nomatch'}, this.msg_absent) },
         }
     },
     async _update_status(uuid_search, el_status) {
@@ -74,21 +80,34 @@ const fafsa_uuid_model = {
     async evt_bulk_search_form(evt) {
         evt.preventDefault()
         const {matching_lines, bulk_query_file_src} = Object.fromEntries(new FormData(evt.target))
-        const keep_matching_lines = 'remove' != matching_lines
+        
+        // Use constants to keep speedy performance and readable code
+        const _c_keep_lines = /^keep/i.test(matching_lines)
+        const _c_remove_lines = /^remove/i.test(matching_lines)
+        const _c_add_column = /column/i.test(matching_lines)
 
-        const uuid_trie = this.uuid_trie
+
+        const uuid_trie = this.uuid_trie, semantic = this._semantic
         let result_lines = []
         for await (let [uuid_search, ln_query, line_no] of this._aiter_bulk_query_lines(bulk_query_file_src.stream())) {
             if (!uuid_search && 1>=line_no) {
                 // Likely header line, keep it
+                if (_c_add_column)
+                    result_lines.push('FAFSA UUID Search Result,')
                 result_lines.push(ln_query, '\r\n')
                 continue
             }
 
             let match = uuid_trie.lookup(uuid_search)
-            if ((match && keep_matching_lines) || (!match && !keep_matching_lines)) {
+            if (_c_add_column) {
+                let msg = match
+                    ? semantic.msg_match
+                    : semantic.msg_absent
+                result_lines.push(`"${msg}",${ln_query}\r\n`)
+
+            } else if ((match && _c_keep_lines) || (!match && _c_remove_lines)) {
                 result_lines.push(ln_query, '\r\n')
-            }
+            } 
 
             this.search(uuid_search) // also update the UI
             if (0 == (line_no % 1000))
@@ -97,7 +116,7 @@ const fafsa_uuid_model = {
         
         {
             let {name, type} = bulk_query_file_src
-            name = `Bulk search ${matching_lines} lines - FAFSA UUID - ${name}`
+            name = `Bulk search ${matching_lines} - FAFSA UUID - ${name}`
 
             let download_link = imm(blob_as_download(name, new Blob(result_lines, {type})), name)
             imm_set(window.bulk_search_result, download_link)
