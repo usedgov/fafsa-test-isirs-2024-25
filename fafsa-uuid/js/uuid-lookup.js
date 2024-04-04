@@ -85,26 +85,31 @@ const fafsa_uuid_model = {
                 continue
             }
 
-            let match = null != uuid_trie.lookup(uuid_search)
+            let match = uuid_trie.lookup(uuid_search)
             if ((match && keep_matching_lines) || (!match && !keep_matching_lines)) {
                 result_lines.push(ln_query, '\r\n')
             }
+
+            this.search(uuid_search) // also update the UI
+            if (0 == (line_no % 1000))
+                await imm_raf()
         }
         
         {
             let {name, type} = bulk_query_file_src
-            name = `Bulk ${matching_lines} query -- ${name}`
+            name = `Bulk search ${matching_lines} lines - FAFSA UUID - ${name}`
 
             let download_link = imm(blob_as_download(name, new Blob(result_lines, {type})), name)
             imm_set(window.bulk_search_result, download_link)
-            download_link.click()
         }
     },
     async * _aiter_bulk_query_lines(file_stream) {
-        const rx_uuid = /[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/
-        let line_no = 0
+        const rx_uuid = /^([5"]?)([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})/
+        let line_no=0
         for await (let ln_query of aiter_stream_lines(file_stream)) {
-            let [uuid] = rx_uuid.exec(ln_query) || []
+            let [,prefix,uuid] = rx_uuid.exec(ln_query) || []
+            // if (uuid && '5' == prefix) // appears to be an ISIR file
+            // if (uuid && '"' == prefix) // appears to be a leading quote of CSV file
             yield [uuid, ln_query, ++line_no]
         }
     },
