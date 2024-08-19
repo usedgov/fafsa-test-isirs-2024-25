@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang=en dir=ltr>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ISIR Split by Destination – 2024-25 FAFSA</title>
+
+    <!-- load 'https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css' inline -->
+    <link rel="stylesheet" data-inline href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" crossorigin="anonymous">
+
+    <style>
+        :not(:defined) { display:none }
+        body { padding: 2rem; }
+        h1 { margin-top: 0; padding-top: 0; }
+
+        header {
+            --header-color: #e8e8e8;
+
+            display: flex;
+            gap: 2rem;
+            position: sticky;
+            top: 0;
+            padding-bottom: 0.5rem;
+            background-color: white;
+
+            &>form {
+                gap: 0.5rem;
+                border-bottom: 2px solid var(--header-color);
+            }
+
+            &>h3 {
+                margin: 0;
+                text-align: center;
+                writing-mode: vertical-rl;
+                text-orientation: sideways;
+                background-color: var(--header-color);
+                padding: 0.5rem;
+                transform: rotate(-0.5turn);
+            }
+        }
+        label { margin-bottom: 0.5rem; }
+
+        .flex { display: flex; }
+        .flex-row { display: flex; flex-direction: row; }
+        .flex-col { display: flex; flex-direction: column; }
+
+        .empty-destinations .if-has-destinations { display: none }
+    </style>
+    
+</head>
+<body class="empty-destinations">
+
+<h1>ISIR Split by Destination</h1>
+
+<form onsubmit="(event.preventDefault(), window.on_download_isir_file(window.el_destinations))">
+    <label>
+        <h4>Select ISIR sample file:</h4>
+        <input id=isir_file_src multiple type=file accept=".dat, .txt" onchange='window.on_use_isir_files(this.files, window.el_destinations)'/>
+    </label>
+    <div class="if-has-destinations">
+        <label>
+            <h4>Include Colleges:</h4>
+            <select id=el_destinations multiple></select>
+        </label>
+        <div>
+            <button type=submit>Download</button>
+            <button type=reset onclick='window.on_reset(window.el_destinations)'>Reset</button>
+        </div>
+    </div>
+</form>
+
+<script type="module">
+// 2024-25 ISIR lines start with a '5' followed by 3 UUIDs
+const rx_is_isir_line = /^5([0-9a-fA-Z]{8}-[0-9a-fA-Z]{4}-[0-9a-fA-Z]{4}-[0-9a-fA-Z]{4}-[0-9a-fA-Z]{12}){3}/
+
+
+// trim SAIG control lines of counts
+const rx_saig_count = /(,XXX,BAT=,\s*)(\d+)/
+const _blank_saig_count = (m0, m_saig_bat, m_count) => m_saig_bat.padEnd(m0.length, ' ')
+
+// the fields 108 to 127 are the 20 College codes
+const isir_field_108 = {len: 6, pos_start: 874, pos_end: 880, idx: 108, name: "College #1"}
+const isir_field_127 = {len: 6, pos_start: 988, pos_end: 994, idx: 127, name: "College #20"}
+
+class ISIR_Splitout {
+    constructor() {
+        this.destinations = new Set()
+        this.isir_files = new Map()
+    }
+
+    parse_isir_lines(isir_lines, src_filename) {
+        // ISIR files are line-oriented (CR+LF)
+        if ('string' === typeof isir_lines) {
+            isir_lines = isir_lines.split(/\r?\n/)
+        }
+
+        const {destinations} = this, isir_tuple_lines = []
+        this.isir_files.set(src_filename, isir_tuple_lines)
+
+        for (let ln of isir_lines) {
+            if (! rx_is_isir_line.test(ln)) {
+                // SAIG control lines are applicable to all colleges
+                ln = ln.replace(rx_saig_count, _blank_saig_count)
+                isir_tuple_lines.push(['', ln])
+                continue
+            }
+
+            let colleges = ln.substring(isir_field_108.pos_start, isir_field_127.pos_end).trimEnd()
+            if (6 === colleges.length) {
+                destinations.add(colleges)
+                // decorate the lines as a tuple (college, source ISIR line)
+                isir_tuple_lines.push([colleges, ln])
+            }
+        }
+
+        return isir_tuple_lines.length
+    }
+
+    *isir_lines_for(included_schools) {
+        // Join ISIR lines for included schools back into a CR+LF line-oriented file
+        included_schools = new Set(included_schools)
+        included_schools.add('') // empty string denotes SAIG control lines
+
+        for (let isir_tuple_lines of this.isir_files.values()) {
+            for (let [college, ln] of isir_tuple_lines) {
+                if (included_schools.has(college)) {
+                    yield ln+'\r\n'
+                }
+            }
+        }
+    }
+
+    asDestinationFileBlob(included_schools) {
+        return new Blob(this.isir_lines_for(included_schools), {type: 'text/plain'})
+    }
+
+    asDestinationDownload(included_schools, filename) {
+        if (!filename) {
+            included_schools = [... included_schools]
+            let [example_filename] = this.isir_files.keys()
+            filename = `ISIR-splitout--${included_schools.join('-')}.${example_filename.split('.').pop()}`
+        }
+
+        return Object.assign(document.createElement('a'), {
+            href: URL.createObjectURL(this.asDestinationFileBlob(included_schools)),
+            download: filename,
+            textContent: filename, })
+    }
+}
+
+window.on_use_isir_files = async function(saig_isir_file_list, el_destinations) {
+    window.result ??= new ISIR_Splitout
+
+    for (let saig_isir_file of saig_isir_file_list) {
+        window.result.parse_isir_lines(
+            await saig_isir_file.text(), saig_isir_file.name)
+    }
+
+    // quick list of Blob file download links
+    el_destinations.textContent = '' // clear
+
+    for (let college of window.result.destinations) {
+        if (college) {
+            el_destinations.append(
+                Object.assign(document.createElement('option'),
+                    {value: college, textContent: college}))
+        }
+    }
+
+    document.body.classList.toggle('empty-destinations', 0 === el_destinations.children.length)
+}
+
+window.on_download_isir_file = (el_destinations) => {
+    let included_schools = Array.from(el_destinations.selectedOptions, el => el.value)
+    console.log("Downloading ISIR Splitout of schools:", included_schools)
+    window.result.asDestinationDownload(included_schools).click()
+    console.log("done")
+}
+
+window.on_reset = (el_destinations) => {
+    delete window.result
+    el_destinations.textContent = '' // clear
+    document.body.classList.toggle('empty-destinations', 0 === el_destinations.children.length)
+}
+</script>
