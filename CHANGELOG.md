@@ -103,3 +103,9 @@ Initial release of project supporting ISIR Layout specification released today, 
     - Added functionality to upload a custom CSV of FAFSA UUIDs to compare against the Department-provided CSVs. This functionality provides search results showing matches and non-matches along with the ability to export a CSV of the results.
     - UI improvements
 
+## 2024-08-27
+
+### Added Tools
+
+- Added [isir-split-by-college.html](./isir-split-by-college.html) to generate an ISIR file that includes only selected College codes.
+

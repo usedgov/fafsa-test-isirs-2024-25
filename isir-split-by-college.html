@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ISIR Split by Destination – 2024-25 FAFSA</title>
+    <title>ISIR Split by College – 2024-25 FAFSA</title>
 
     <!-- load 'https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css' inline -->
     <link rel="stylesheet" data-inline href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" crossorigin="anonymous">
@@ -50,11 +50,11 @@
 </head>
 <body class="empty-destinations">
 
-<h1>ISIR Split by Destination</h1>
+<h1>ISIR Split by College</h1>
 
 <form onsubmit="(event.preventDefault(), window.on_download_isir_file(window.el_destinations))">
     <label>
-        <h4>Select ISIR sample file:</h4>
+        <h4>Select ISIR file:</h4>
         <input id=isir_file_src multiple type=file accept=".dat, .txt" onchange='window.on_use_isir_files(this.files, window.el_destinations)'/>
     </label>
     <div class="if-has-destinations">
