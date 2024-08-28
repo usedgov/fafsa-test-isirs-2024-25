@@ -49,6 +49,15 @@ This standalone tool can ingest an Excel spreadsheet and provide ISIRs in text (
 5. The "Output" area displays links to text ISIRs with a `.txt` extension. You can choose to download your sample ISIRs altogether in one file or in individual files.
 6. There is also a link to download the ISIRs as a JSON file, which can be used when reviewing ISIR fields as read by `isir-module.js`.
 
+**[`isir-split-by-college.html`](./isir-split-by-college.html)**
+This standalone tool can intake one or more files of ISIRs with .dat or .txt extension, filter the ISIRs to include selected College codes, and download an ISIR file that includes only the selected codes.
+1. Download the [`isir-split-by-college.html`](./isir-split-by-college.html) file.
+2. Open `isir-split-by-college.html` in a browser (Google Chrome or Microsoft Edge preferred).
+3. Load one or more files of ISIRs with `.dat` or `.txt` extensions using the "Select ISIR file" menu item.
+4. The tool will inventory all the College codes (field 108) referenced by any ISIRs in the files.
+5. Select one or more College codes from the "Include Colleges" selection menu.
+6. Use the "Download" button to generate a new merged file including only the ISIRs for selected Colleges.
+
 **[`mock-isir-information.html`](./mock-isir-information.html)**  
 This standalone tool generates mock data that can be used when hand-generating test ISIRs.
 1. Download the [`mock-isir-information.html`](./mock-isir-information.html) file.
